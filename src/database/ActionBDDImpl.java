@@ -134,9 +134,9 @@ public class ActionBDDImpl {
 
   public List<Programmeur> getProgrammeursFromProjet(int idProjet) {
     try {
-      String query = "SELECT id, nom, prenom, anneeNaissance, salaire, prime, pseudo FROM programmeur" +
-                     "INNER JOIN travailler ON programmeur.id = travailler.idProgrammeur " +
-                     "WHERE travailler.idProjet = ?";
+      String query = "SELECT * FROM programmeur " +
+                     "INNER JOIN programmeur_projet ON programmeur.id = programmeur_projet.idProgrammeur " +
+                     "WHERE programmeur_projet.idProjet = ?";
       PreparedStatement statement = connection.prepareStatement(query);
       statement.setInt(1, idProjet);
       ResultSet resultSet = statement.executeQuery();
