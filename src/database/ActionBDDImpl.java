@@ -3,11 +3,13 @@ package database;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import entity.Programmeur;
 import entity.Projet;
@@ -24,6 +26,7 @@ public class ActionBDDImpl {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 
+      // TODO sortir vers des fichiers de config
       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdtpjava", "root", "root");
     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
         | NoSuchMethodException | SecurityException | ClassNotFoundException | SQLException e) {
@@ -42,13 +45,7 @@ public class ActionBDDImpl {
       List<Programmeur> programmeurs = new ArrayList<>();
 
       while (resultSet.next()) {
-        String nom = resultSet.getString("nom");
-        String prenom = resultSet.getString("prenom");
-        int ANNAISSANCE = resultSet.getInt("ANNAISSANCE");
-        int salaire = resultSet.getInt("salaire");
-        int prime = resultSet.getInt("prime");
-        String pseudo = resultSet.getString("pseudo");
-        Programmeur programmeur = new Programmeur(nom, prenom, ANNAISSANCE, salaire, prime, pseudo);
+        Programmeur programmeur = getProgrammeurFromResultSet(resultSet);
         programmeurs.add(programmeur);
       }
       // Close resources
@@ -59,6 +56,34 @@ public class ActionBDDImpl {
       e.printStackTrace();
       return List.of();
     }
+  }
+
+  private Programmeur getProgrammeurFromResultSet(ResultSet resultSet) throws SQLException {
+    String nom = resultSet.getString("nom");
+    String prenom = resultSet.getString("prenom");
+    int ANNAISSANCE = resultSet.getInt("ANNAISSANCE");
+    int salaire = resultSet.getInt("salaire");
+    int prime = resultSet.getInt("prime");
+    String pseudo = resultSet.getString("pseudo");
+    Programmeur programmeur = new Programmeur(nom, prenom, ANNAISSANCE, salaire, prime, pseudo);
+    return programmeur;
+  }
+
+  public Optional<Programmeur> getProgrammeur(int idProgrammeur) {
+    try {
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM programmeur WHERE id = ?");
+      statement.setInt(1, idProgrammeur);
+      ResultSet resultSet = statement.executeQuery();
+
+      if (resultSet.next()) {
+        return Optional.of(getProgrammeurFromResultSet(resultSet));
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return Optional.empty();
+
   }
 
   public boolean deleteProgrammeur(int id) {

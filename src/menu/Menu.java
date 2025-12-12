@@ -88,6 +88,5 @@ public class Menu {
     for (Programmeur programmeur : programmeurs) {
       System.out.println(programmeur);
     }
-    throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeurs'");
   }
 }
