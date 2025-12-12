@@ -14,17 +14,9 @@ import entity.Projet;
 
 
 public class ActionBDDImpl {
-  private static Connection connection;
+  private Connection connection;
 
-  public static void main(String[] args) {
-    connect();
-    List<Programmeur> programmeurs = getProgrammeurs();
-    for (Programmeur programmeur : programmeurs) {
-      System.out.println(programmeur);
-    }
-  }
-
-  public static void connect() {
+  public void connect() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 
@@ -36,7 +28,7 @@ public class ActionBDDImpl {
 
   }
 
-  public static List<Programmeur> getProgrammeurs() {
+  public List<Programmeur> getProgrammeurs() {
     // Create statement
     try {
       Statement statement = connection.createStatement();
@@ -65,23 +57,23 @@ public class ActionBDDImpl {
     }
   }
 
-  public static boolean deleteProgrammeur(int id) {
+  public boolean deleteProgrammeur(int id) {
     return true;
   }
 
-  public static boolean addProgrammeur(Programmeur programmeur) {
+  public boolean addProgrammeur(Programmeur programmeur) {
     return true;
   }
 
-  public static boolean updateProgrammeur(int id, Programmeur programmeur) {
+  public boolean updateProgrammeur(int id, Programmeur programmeur) {
     return true;
   }
 
-  public static List<Projet> getProjets() {
+  public List<Projet> getProjets() {
     return null;
   }
 
-  public static List<Programmeur> getProgrammeursFromProjet(int idProjet) {
+  public List<Programmeur> getProgrammeursFromProjet(int idProjet) {
     return null;
   }
 }

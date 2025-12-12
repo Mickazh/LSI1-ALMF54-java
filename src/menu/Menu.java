@@ -1,9 +1,20 @@
 package menu;
 
+import java.util.List;
 import java.util.Scanner;
 
+import database.ActionBDDImpl;
+import entity.Programmeur;
+
 public class Menu {
-  public static void start() {
+
+  private ActionBDDImpl actionBDDImpl;
+
+  public Menu() {
+    this.actionBDDImpl = new ActionBDDImpl();
+  }
+
+  public void start() {
     int choix;
     Scanner scanner = new Scanner(System.in);
     do {
@@ -40,40 +51,43 @@ public class Menu {
     } while (true);
   }
 
-  private static void afficherProgrammeursDUnProjet() {
+  private void afficherProgrammeursDUnProjet() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeursDUnProjet'");
   }
 
-  private static void afficherProjets() {
+  private void afficherProjets() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'afficherProjets'");
 
   }
 
-  private static void modifierSalaire() {
+  private void modifierSalaire() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'modifierSalaire'");
   }
 
-  private static void ajouterProgrammeur() {
+  private void ajouterProgrammeur() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'ajouterProgrammeur'");
   }
 
-  private static void supprimerProgrammeur() {
+  private void supprimerProgrammeur() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'supprimerProrgammeur'");
   }
 
-  private static void afficherProgrammeur() {
+  private void afficherProgrammeur() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeur'");
 
   }
 
-  private static void afficherProgrammeurs() {
-    // TODO Auto-generated method stub
+  private void afficherProgrammeurs() {
+    List<Programmeur> programmeurs = this.actionBDDImpl.getProgrammeurs();
+    for (Programmeur programmeur : programmeurs) {
+      System.out.println(programmeur);
+    }
     throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeurs'");
   }
 }
