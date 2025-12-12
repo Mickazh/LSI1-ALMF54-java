@@ -41,7 +41,7 @@ public class Menu {
           afficherProjets();
           break;
         case 7:
-          afficherProgrammeursDUnProjet();
+          afficherProgrammeursDUnProjet(scanner);
           break;
         case 8:
           scanner.close();
@@ -67,8 +67,7 @@ public class Menu {
     System.out.print("Votre choix : ");
   }
 
-  private void afficherProgrammeursDUnProjet() {
-    Scanner scanner = new Scanner(System.in);
+  private void afficherProgrammeursDUnProjet(Scanner scanner) {
     System.out.println("\nAfficher les programmeurs d'un projet");
     System.out.print("Entrez l'ID du projet : ");
     int idProjet = scanner.nextInt();
