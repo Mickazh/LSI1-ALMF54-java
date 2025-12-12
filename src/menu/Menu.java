@@ -1,6 +1,7 @@
 package menu;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import database.ActionBDDImpl;
@@ -24,10 +25,10 @@ public class Menu {
           afficherProgrammeurs();
           break;
         case 2:
-          afficherProgrammeur();
+          afficherProgrammeur(scanner);
           break;
         case 3:
-          supprimerProgrammeur();
+          supprimerProgrammeur(scanner);
           break;
         case 4:
           ajouterProgrammeur();
@@ -72,15 +73,28 @@ public class Menu {
     throw new UnsupportedOperationException("Unimplemented method 'ajouterProgrammeur'");
   }
 
-  private void supprimerProgrammeur() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'supprimerProrgammeur'");
+  private void supprimerProgrammeur(Scanner scanner) {
+    System.out.print("Entrez l'id du programmeur à supprimer : ");
+    int idProgrammeur = scanner.nextInt();
+    boolean isProgmmeurSupprime = actionBDDImpl.deleteProgrammeur(idProgrammeur);
+    while (!isProgmmeurSupprime) {
+      System.out.print("Supression KO. Saisissez à nouveau l'id : ");
+      idProgrammeur = scanner.nextInt();
+      isProgmmeurSupprime = actionBDDImpl.deleteProgrammeur(idProgrammeur);
+    }
   }
 
-  private void afficherProgrammeur() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeur'");
-
+  private void afficherProgrammeur(Scanner scanner) {
+    Optional<Programmeur> optionalProgrammeur;
+    System.out.print("Entrez l'id du programmeur à afficher : ");
+    int idProgrammeur = scanner.nextInt();
+    optionalProgrammeur = actionBDDImpl.getProgrammeur(idProgrammeur);
+    while (optionalProgrammeur.isEmpty()) {
+      System.out.print("Recherche KO. Saisissez à nouveau l'id : ");
+      idProgrammeur = scanner.nextInt();
+      optionalProgrammeur = actionBDDImpl.getProgrammeur(idProgrammeur);
+    }
+    System.out.println(optionalProgrammeur.get());
   }
 
   private void afficherProgrammeurs() {

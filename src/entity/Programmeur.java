@@ -179,6 +179,13 @@ public class Programmeur {
       this.responsable = responsable;
     }
 
+    @Override
+    public String toString() {
+        return "Programmeur [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", anneeNaissance=" + anneeNaissance
+                + ", hobby=" + hobby + ", responsable=" + responsable + ", salaire=" + salaire + ", prime=" + prime
+                + ", pseudo=" + pseudo + "]";
+    }
+
     
     
 }

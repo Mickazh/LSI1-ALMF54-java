@@ -89,8 +89,18 @@ public class ActionBDDImpl {
 
   }
 
-  public boolean deleteProgrammeur(int id) {
-    return true;
+  public boolean deleteProgrammeur(int idProgrammeur) {
+    try {
+      PreparedStatement statement = connection.prepareStatement("DELETE FROM programmeur WHERE id = ?");
+      statement.setInt(1, idProgrammeur);
+      int affectedRow = statement.executeUpdate();
+
+      return affectedRow == 1;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   public boolean addProgrammeur(Programmeur programmeur) {
