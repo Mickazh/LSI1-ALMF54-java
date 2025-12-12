@@ -16,6 +16,10 @@ import entity.Projet;
 public class ActionBDDImpl {
   private Connection connection;
 
+  public ActionBDDImpl() {
+    connect();
+  }
+
   public void connect() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
