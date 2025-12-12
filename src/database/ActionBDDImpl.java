@@ -59,13 +59,16 @@ public class ActionBDDImpl {
   }
 
   private Programmeur getProgrammeurFromResultSet(ResultSet resultSet) throws SQLException {
+    int id = resultSet.getInt("id");
     String nom = resultSet.getString("nom");
     String prenom = resultSet.getString("prenom");
     int ANNAISSANCE = resultSet.getInt("ANNAISSANCE");
+    String hobby = resultSet.getString("hobby");
+    String responsable = resultSet.getString("responsable");
     int salaire = resultSet.getInt("salaire");
     int prime = resultSet.getInt("prime");
     String pseudo = resultSet.getString("pseudo");
-    Programmeur programmeur = new Programmeur(nom, prenom, ANNAISSANCE, salaire, prime, pseudo);
+    Programmeur programmeur = new Programmeur(id, nom, prenom, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo);
     return programmeur;
   }
 
