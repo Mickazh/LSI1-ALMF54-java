@@ -2,12 +2,20 @@ package entity;
 
 
 public class Programmeur {
+    private int id;
     private String nom;
     private String prenom;
     private int anneeNaissance;
+    private String hobby;
+    private String responsable;
     private int salaire;
     private int prime;
     private String pseudo;
+    
+    /**
+     * 
+     */
+    public Programmeur() {}
     
     /**
      * @param nom
@@ -17,11 +25,15 @@ public class Programmeur {
      * @param prime
      * @param pseudo
      */
-    public Programmeur(String nom, String prenom, int anneeNaissance, int salaire, int prime, String pseudo) {
-      super();
+    public Programmeur(int id, String nom, String prenom, int anneeNaissance,
+                       String hobby, String responsable,
+                       int salaire, int prime, String pseudo) {
+      this.id = id;
       this.nom = nom;
       this.prenom = prenom;
       this.anneeNaissance = anneeNaissance;
+      this.hobby = hobby;
+      this.responsable = responsable;
       this.salaire = salaire;
       this.prime = prime;
       this.pseudo = pseudo;
@@ -121,6 +133,50 @@ public class Programmeur {
      */
     public void setPseudo(String pseudo) {
       this.pseudo = pseudo;
+    }
+
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+      return id;
+    }
+
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+      this.id = id;
+    }
+
+    /**
+     * @return the hobby
+     */
+    public String getHobby() {
+      return hobby;
+    }
+
+    /**
+     * @param hobby the hobby to set
+     */
+    public void setHobby(String hobby) {
+      this.hobby = hobby;
+    }
+
+    /**
+     * @return the responsable
+     */
+    public String getResponsable() {
+      return responsable;
+    }
+
+    /**
+     * @param responsable the responsable to set
+     */
+    public void setResponsable(String responsable) {
+      this.responsable = responsable;
     }
 
     
