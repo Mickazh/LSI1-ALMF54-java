@@ -18,6 +18,7 @@ public class Menu {
     int choix;
     Scanner scanner = new Scanner(System.in);
     do {
+      afficherMenu();
       choix = scanner.nextInt();
       switch (choix) {
         case 1:
@@ -45,21 +46,58 @@ public class Menu {
           scanner.close();
           return;
         default:
+          System.out.println("Choix invalide. Veuillez réessayer.");
           break;
       }
       
     } while (true);
   }
 
+  private void afficherMenu() {
+    System.out.println("\n************** MENU PRINCIPAL **************");
+    System.out.println("1. Afficher tous les programmeurs");
+    System.out.println("2. Afficher un programmeur");
+    System.out.println("3. Supprimer un programmeur");
+    System.out.println("4. Ajouter un programmeur");
+    System.out.println("5. Modifier le salaire d'un programmeur");
+    System.out.println("6. Afficher tous les projets");
+    System.out.println("7. Afficher les programmeurs d'un projet");
+    System.out.println("8. Quitter");
+    System.out.print("Votre choix : ");
+  }
+
   private void afficherProgrammeursDUnProjet() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'afficherProgrammeursDUnProjet'");
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("\nAfficher les programmeurs d'un projet");
+    System.out.print("Entrez l'ID du projet : ");
+    int idProjet = scanner.nextInt();
+
+    List<Programmeur> programmeurs = this.actionBDDImpl.getProgrammeursFromProjet(idProjet);
+
+    if (programmeurs.isEmpty()) {
+      System.out.println("Aucun programmeur trouvé pour ce projet.");
+    } else {
+      System.out.println("\n Programmeurs du projet " + idProjet + " :");
+      for (Programmeur programmeur : programmeurs) {
+        System.out.println(programmeur);
+      }
+    }
   }
 
   private void afficherProjets() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'afficherProjets'");
-
+    List<entity.Projet> projets = this.actionBDDImpl.getProjets();
+    if (projets.isEmpty()) {
+      System.out.println("Aucun projet trouvé.");
+    } else {
+      System.out.println("\nListe des projets");
+      for (entity.Projet projet : projets) {
+        System.out.println("ID: " + projet.getId() + " - " + projet.getIntitule() +
+                         " (État: " + projet.getEtat() + ")");
+        System.out.println("  Début: " + projet.getDateDebut() + " - Fin: " + projet.getDateFin());
+        System.out.println("  Nombre de programmeurs: " + projet.getProgrammeurs().size());
+        System.out.println();
+      }
+    }
   }
 
   private void modifierSalaire() {

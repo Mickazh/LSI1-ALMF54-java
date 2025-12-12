@@ -1,16 +1,12 @@
 package database;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import entity.Etat;
 import entity.Programmeur;
 import entity.Projet;
 
@@ -99,10 +95,51 @@ public class ActionBDDImpl {
   }
 
   public List<Projet> getProjets() {
-    return null;
+      try {
+          String query = "SELECT id, intitule, dateDebut, dateFin, etat FROM projet";
+          PreparedStatement statement = connection.prepareStatement(query);
+          ResultSet resultat = statement.executeQuery();
+          List<Projet> projets = new ArrayList<>();
+          while (resultat.next()) {
+              int id = resultat.getInt("id");
+              String intitule = resultat.getString("intitule");
+              Date dateDebut = resultat.getDate("dateDebut");
+              Date dateFin = resultat.getDate("dateFin");
+              Etat etat = Etat.valueOf(resultat.getString("etat"));
+              List<Programmeur> programmeurs = getProgrammeursFromProjet(id);
+              Projet projet = new Projet(intitule, dateDebut, dateFin, etat, programmeurs);
+              projets.add(projet);
+          }
+          resultat.close();
+          statement.close();
+          return projets;
+      } catch (SQLException e) {
+          System.out.println("Erreur lors de la récupération des projets : " + e.getMessage());
+          return List.of();
+      }
   }
 
   public List<Programmeur> getProgrammeursFromProjet(int idProjet) {
-    return null;
+    try {
+      String query = "SELECT id, nom, prenom, anneeNaissance, salaire, prime, pseudo FROM programmeur" +
+                     "INNER JOIN travailler ON programmeur.id = travailler.idProgrammeur " +
+                     "WHERE travailler.idProjet = ?";
+      PreparedStatement statement = connection.prepareStatement(query);
+      statement.setInt(1, idProjet);
+      ResultSet resultSet = statement.executeQuery();
+
+      List<Programmeur> programmeurs = new ArrayList<>();
+      while (resultSet.next()) {
+        Programmeur programmeur = getProgrammeurFromResultSet(resultSet);
+        programmeurs.add(programmeur);
+      }
+
+      resultSet.close();
+      statement.close();
+      return programmeurs;
+    } catch (SQLException e) {
+      System.out.println("Erreur lors de la récupération des programmeurs du projet : " + e.getMessage());
+      return List.of();
+    }
   }
 }
