@@ -1,6 +1,7 @@
 package menu;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import database.ActionBDDImpl;
@@ -14,12 +15,12 @@ public class Menu {
     this.actionBDDImpl = new ActionBDDImpl();
   }
 
-  public void start() {
+  public void start() { 
     int choix;
     Scanner scanner = new Scanner(System.in);
-    do {
+    do { 
       choix = scanner.nextInt();
-      switch (choix) {
+      switch (choix) { 
         case 1:
           afficherProgrammeurs();
           break;
@@ -29,11 +30,11 @@ public class Menu {
         case 3:
           supprimerProgrammeur();
           break;
-        case 4:
-          ajouterProgrammeur();
+        case 4: 
+          ajouterProgrammeur(scanner);
           break;
-        case 5:
-          modifierSalaire();
+        case 5: 
+          modifierSalaire(scanner);
           break;
         case 6:
           afficherProjets();
@@ -62,14 +63,69 @@ public class Menu {
 
   }
 
-  private void modifierSalaire() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'modifierSalaire'");
+  /**
+   * Modifier le salaire d'un programmeur
+   * @param in le scanner
+   * @return true si la modification a réussie, false sinon
+   */
+  private boolean modifierSalaire(Scanner in) {
+    
+    Optional<Programmeur> programmeur;
+    try {
+      do {
+        System.out.println("Id du programmeur: ");
+        int id = in.nextInt();
+        
+        programmeur = actionBDDImpl.getProgrammeur(id);
+      } while (programmeur.isEmpty());
+      
+        Programmeur p = programmeur.get();
+        
+        System.out.println("Nouveau salaire du programmeur: ");
+        int salaire = in.nextInt();
+        
+        p.setSalaire(salaire);
+        
+        return actionBDDImpl.updateProgrammeur(p.getId(), p);           
+    } catch (Exception e) {
+      return false;
+    }
+
   }
 
-  private void ajouterProgrammeur() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'ajouterProgrammeur'");
+  /**
+   * Ajouter un programmeur
+   * @param in le scanner
+   * @return true si l'ajout a réussi, false sinon
+   */
+  private boolean ajouterProgrammeur(Scanner in) {
+    Programmeur p = new Programmeur();
+    
+    try {
+      System.out.println("Nom du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Prénom du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Adresse du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Pseudo du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Responsable du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Année de naissance du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Hobby du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Salaire du programmeur: ");
+      p.setNom(in.next());
+      System.out.println("Prime du programmeur: ");
+      p.setNom(in.next());
+
+      return actionBDDImpl.addProgrammeur(p);
+
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   private void supprimerProgrammeur() {
