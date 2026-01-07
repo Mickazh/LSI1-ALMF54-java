@@ -1,7 +1,12 @@
 package database;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +25,10 @@ public class ActionBDDImpl {
 
   public void connect() {
     try {
-      Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-
-      // TODO sortir vers des fichiers de config
-      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bdtpjava", "root", "root");
-    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-        | NoSuchMethodException | SecurityException | ClassNotFoundException | SQLException e) {
+      Class.forName("com.mysql.cj.jdbc.Driver");
+      String dbUrl ="jdbc:mysql://localhost:3306/bdtpjava";
+      connection = DriverManager.getConnection(dbUrl, "root", "root");
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
@@ -99,12 +102,67 @@ public class ActionBDDImpl {
     return false;
   }
 
+  /**
+   * Ajouter un programmeur
+   * @param programmeur le programmeur
+   * @return true si la requête s'est bien passée, false sinon
+   */
   public boolean addProgrammeur(Programmeur programmeur) {
-    return true;
+    try {
+      PreparedStatement statement = connection.prepareStatement
+          ("INSERT INTO programmeur VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      statement.setInt(1, programmeur.getId());
+      statement.setString(2, programmeur.getNom());
+      statement.setString(3, programmeur.getPrenom());
+      statement.setInt(4, programmeur.getAnneeNaissance());
+      statement.setString(5, programmeur.getHobby());
+      statement.setString(6, programmeur.getResponsable());
+      statement.setInt(7, programmeur.getSalaire());
+      statement.setInt(8, programmeur.getPrime());
+      statement.setString(9, programmeur.getPseudo());
+      
+      statement.executeQuery();
+      
+      return true;
+      
+    } catch (SQLException e) {
+      return false;
+    }
   }
 
+  /**
+   * Mettre à jour un programmeur
+   * @param id l'id du programmeur à mettre à jour
+   * @param programmeur le programmeur contenant les modification
+   * @return true si la requête s'est bien passée, false sinon
+   */
   public boolean updateProgrammeur(int id, Programmeur programmeur) {
-    return true;
+    try {
+      PreparedStatement statement = connection.prepareStatement
+          ("UPDATE programmeur SET NOM = '?',"
+                                + "PRENOM = '?',"
+                                + "ANNEENAISSANCE = '?',"
+                                + "HOBBY = '?',"
+                                + "RESPONSABLE = '?',"
+                                + "SALAIRE = '?',"
+                                + "PRIME = '?',"
+                                + "PSEUDO = '?'"
+          + "WHERE id = ?;");
+      
+      statement.setString(1, programmeur.getNom());
+      statement.setString(2, programmeur.getPrenom());
+      statement.setInt(3, programmeur.getAnneeNaissance());
+      statement.setString(4, programmeur.getHobby());
+      statement.setString(5, programmeur.getResponsable());
+      statement.setInt(6, programmeur.getSalaire());
+      statement.setInt(7, programmeur.getPrime());
+      statement.setString(8, programmeur.getPseudo());
+      statement.setInt(9, programmeur.getId());
+      return true;
+      
+    } catch (SQLException e) {
+      return false;
+    } 
   }
 
   public List<Projet> getProjets() {
