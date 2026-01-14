@@ -27,6 +27,26 @@ public class Projet {
         this.programmeurs = programmeurs;
     }
 
+    /**
+     * 
+     * @param id
+     * @param intitule
+     * @param dateDebut
+     * @param dateFin
+     * @param etat
+     * @param programmeurs
+     */
+    public Projet(int id, String intitule, Date dateDebut, Date dateFin, Etat etat, List<Programmeur> programmeurs) {
+        this.id = id;
+        this.intitule = intitule;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.etat = etat;
+        this.programmeurs = programmeurs;
+    }
+
+
+
 
     /**
      * @return the intitule

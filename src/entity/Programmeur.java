@@ -5,6 +5,7 @@ public class Programmeur {
     private int id;
     private String nom;
     private String prenom;
+    private String adresse;
     private int anneeNaissance;
     private String hobby;
     private String responsable;
@@ -18,19 +19,24 @@ public class Programmeur {
     public Programmeur() {}
     
     /**
+     * @param id
      * @param nom
      * @param prenom
+     * @param adresse
      * @param anneeNaissance
+     * @param hobby
+     * @param responsable
      * @param salaire
      * @param prime
      * @param pseudo
      */
-    public Programmeur(int id, String nom, String prenom, int anneeNaissance,
+    public Programmeur(int id, String nom, String prenom, String adresse, int anneeNaissance,
                        String hobby, String responsable,
                        int salaire, int prime, String pseudo) {
       this.id = id;
       this.nom = nom;
       this.prenom = prenom;
+      this.adresse = adresse;
       this.anneeNaissance = anneeNaissance;
       this.hobby = hobby;
       this.responsable = responsable;
@@ -179,9 +185,23 @@ public class Programmeur {
       this.responsable = responsable;
     }
 
+    /**
+     * @return the adresse
+     */
+    public String getAdresse() {
+      return adresse;
+    }
+
+    /**
+     * @param adresse the adresse to set
+     */
+    public void setAdresse(String adresse) {
+      this.adresse = adresse;
+    }
+
     @Override
     public String toString() {
-        return "Programmeur [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", anneeNaissance=" + anneeNaissance
+        return "Programmeur [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", adresse=" + adresse + ", anneeNaissance=" + anneeNaissance
                 + ", hobby=" + hobby + ", responsable=" + responsable + ", salaire=" + salaire + ", prime=" + prime
                 + ", pseudo=" + pseudo + "]";
     }

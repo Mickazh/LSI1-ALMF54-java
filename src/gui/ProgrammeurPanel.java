@@ -262,6 +262,7 @@ public class ProgrammeurPanel extends JPanel {
         // Champs du formulaire
         JTextField nomField = new JTextField(20);
         JTextField prenomField = new JTextField(20);
+        JTextField adresseField = new JTextField(20);
         JTextField anneeField = new JTextField(20);
         JTextField hobbyField = new JTextField(20);
         JTextField responsableField = new JTextField(20);
@@ -273,6 +274,7 @@ public class ProgrammeurPanel extends JPanel {
         int row = 0;
         addFormField(formPanel, gbc, row++, "Nom :", nomField);
         addFormField(formPanel, gbc, row++, "Prénom :", prenomField);
+        addFormField(formPanel, gbc, row++, "Adresse :", adresseField);
         addFormField(formPanel, gbc, row++, "Année de naissance :", anneeField);
         addFormField(formPanel, gbc, row++, "Hobby :", hobbyField);
         addFormField(formPanel, gbc, row++, "Responsable :", responsableField);
@@ -291,6 +293,7 @@ public class ProgrammeurPanel extends JPanel {
                     0,
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
+                    adresseField.getText().trim(),
                     Integer.parseInt(anneeField.getText().trim()),
                     hobbyField.getText().trim(),
                     responsableField.getText().trim(),
@@ -308,6 +311,7 @@ public class ProgrammeurPanel extends JPanel {
                     // Réinitialiser les champs
                     nomField.setText("");
                     prenomField.setText("");
+                    adresseField.setText("");
                     anneeField.setText("");
                     hobbyField.setText("");
                     responsableField.setText("");
@@ -332,6 +336,7 @@ public class ProgrammeurPanel extends JPanel {
         clearButton.addActionListener(e -> {
             nomField.setText("");
             prenomField.setText("");
+            adresseField.setText("");
             anneeField.setText("");
             hobbyField.setText("");
             responsableField.setText("");

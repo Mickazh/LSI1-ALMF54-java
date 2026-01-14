@@ -15,13 +15,19 @@ public class Menu {
     this.actionBDDImpl = new ActionBDDImpl();
   }
 
-  public void start() { 
+  public void start() {
     int choix;
     Scanner scanner = new Scanner(System.in);
     do {
       afficherMenu();
-      choix = scanner.nextInt();
-      switch (choix) { 
+      String choixStr = scanner.nextLine().trim();
+      try {
+        choix = Integer.parseInt(choixStr);
+      } catch (NumberFormatException e) {
+        System.out.println("Choix invalide. Veuillez réessayer.");
+        continue;
+      }
+      switch (choix) {
         case 1:
           afficherProgrammeurs();
           break;
@@ -70,7 +76,14 @@ public class Menu {
   private void afficherProgrammeursDUnProjet(Scanner scanner) {
     System.out.println("\nAfficher les programmeurs d'un projet");
     System.out.print("Entrez l'ID du projet : ");
-    int idProjet = scanner.nextInt();
+    String idStr = scanner.nextLine().trim();
+    int idProjet;
+    try {
+      idProjet = Integer.parseInt(idStr);
+    } catch (NumberFormatException e) {
+      System.out.println("ID invalide.");
+      return;
+    }
 
     List<Programmeur> programmeurs = this.actionBDDImpl.getProgrammeursFromProjet(idProjet);
 
@@ -106,24 +119,26 @@ public class Menu {
    * @return true si la modification a réussie, false sinon
    */
   private boolean modifierSalaire(Scanner in) {
-    
+
     Optional<Programmeur> programmeur;
     try {
       do {
         System.out.println("Id du programmeur: ");
-        int id = in.nextInt();
-        
+        String idStr = in.nextLine().trim();
+        int id = Integer.parseInt(idStr);
+
         programmeur = actionBDDImpl.getProgrammeur(id);
       } while (programmeur.isEmpty());
-      
+
         Programmeur p = programmeur.get();
-        
+
         System.out.println("Nouveau salaire du programmeur: ");
-        int salaire = in.nextInt();
-        
+        String salaireStr = in.nextLine().trim();
+        int salaire = Integer.parseInt(salaireStr);
+
         p.setSalaire(salaire);
-        
-        return actionBDDImpl.updateProgrammeur(p.getId(), p);           
+
+        return actionBDDImpl.updateProgrammeur(p.getId(), p);
     } catch (Exception e) {
       return false;
     }
@@ -137,56 +152,79 @@ public class Menu {
    */
   private boolean ajouterProgrammeur(Scanner in) {
     Programmeur p = new Programmeur();
-    
+
     try {
       System.out.println("Nom du programmeur: ");
-      p.setNom(in.next());
+      p.setNom(in.nextLine().trim());
       System.out.println("Prénom du programmeur: ");
-      p.setNom(in.next());
+      p.setPrenom(in.nextLine().trim());
       System.out.println("Adresse du programmeur: ");
-      p.setNom(in.next());
-      System.out.println("Pseudo du programmeur: ");
-      p.setNom(in.next());
-      System.out.println("Responsable du programmeur: ");
-      p.setNom(in.next());
+      p.setAdresse(in.nextLine().trim());
       System.out.println("Année de naissance du programmeur: ");
-      p.setNom(in.next());
+      p.setAnneeNaissance(Integer.parseInt(in.nextLine().trim()));
       System.out.println("Hobby du programmeur: ");
-      p.setNom(in.next());
+      p.setHobby(in.nextLine().trim());
+      System.out.println("Responsable du programmeur: ");
+      p.setResponsable(in.nextLine().trim());
       System.out.println("Salaire du programmeur: ");
-      p.setNom(in.next());
+      p.setSalaire(Integer.parseInt(in.nextLine().trim()));
       System.out.println("Prime du programmeur: ");
-      p.setNom(in.next());
+      p.setPrime(Integer.parseInt(in.nextLine().trim()));
+      System.out.println("Pseudo du programmeur: ");
+      p.setPseudo(in.nextLine().trim());
 
-      return actionBDDImpl.addProgrammeur(p);
+      
+      if (actionBDDImpl.addProgrammeur(p)) {
+        System.out.println("AJOUT REUSSI !");
+        return true;
+      }
+      return false;
 
+    } catch (NumberFormatException numberFormatException) {
+      System.err.println("Saisie incorrect");
+        return false;
     } catch (Exception e) {
       return false;
     }
   }
 
   private void supprimerProgrammeur(Scanner scanner) {
-    System.out.print("Entrez l'id du programmeur à supprimer : ");
-    int idProgrammeur = scanner.nextInt();
-    boolean isProgmmeurSupprime = actionBDDImpl.deleteProgrammeur(idProgrammeur);
-    while (!isProgmmeurSupprime) {
-      System.out.print("Supression KO. Saisissez à nouveau l'id : ");
-      idProgrammeur = scanner.nextInt();
-      isProgmmeurSupprime = actionBDDImpl.deleteProgrammeur(idProgrammeur);
+    while (true) {
+      System.out.print("Entrez l'id du programmeur à supprimer : ");
+      String idStr = scanner.nextLine().trim();
+      try {
+        int idProgrammeur = Integer.parseInt(idStr);
+        boolean isProgmmeurSupprime = actionBDDImpl.deleteProgrammeur(idProgrammeur);
+        if (isProgmmeurSupprime) {
+          System.out.println("Programmeur supprimé avec succès.");
+          break;
+        } else {
+          System.out.println("Supression KO. Saisissez à nouveau l'id : ");
+        }
+      } catch (NumberFormatException e) {
+        System.out.println("ID invalide. Veuillez entrer un nombre.");
+      }
     }
   }
 
   private void afficherProgrammeur(Scanner scanner) {
     Optional<Programmeur> optionalProgrammeur;
-    System.out.print("Entrez l'id du programmeur à afficher : ");
-    int idProgrammeur = scanner.nextInt();
-    optionalProgrammeur = actionBDDImpl.getProgrammeur(idProgrammeur);
-    while (optionalProgrammeur.isEmpty()) {
-      System.out.print("Recherche KO. Saisissez à nouveau l'id : ");
-      idProgrammeur = scanner.nextInt();
-      optionalProgrammeur = actionBDDImpl.getProgrammeur(idProgrammeur);
+    while (true) {
+      System.out.print("Entrez l'id du programmeur à afficher : ");
+      String idStr = scanner.nextLine().trim();
+      try {
+        int idProgrammeur = Integer.parseInt(idStr);
+        optionalProgrammeur = actionBDDImpl.getProgrammeur(idProgrammeur);
+        if (optionalProgrammeur.isPresent()) {
+          System.out.println(optionalProgrammeur.get());
+          break;
+        } else {
+          System.out.println("Programmeur non trouvé.");
+        }
+      } catch (NumberFormatException e) {
+        System.out.println("ID invalide. Veuillez entrer un nombre.");
+      }
     }
-    System.out.println(optionalProgrammeur.get());
   }
 
   private void afficherProgrammeurs() {

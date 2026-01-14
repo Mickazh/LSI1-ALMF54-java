@@ -16,7 +16,7 @@ import entity.Programmeur;
 import entity.Projet;
 
 
-public class ActionBDDImpl {
+public class ActionBDDImpl implements ActionBDD {
   private Connection connection;
 
   public ActionBDDImpl() {
@@ -61,13 +61,14 @@ public class ActionBDDImpl {
     int id = resultSet.getInt("id");
     String nom = resultSet.getString("nom");
     String prenom = resultSet.getString("prenom");
+    String adresse = resultSet.getString("adresse");
     int ANNAISSANCE = resultSet.getInt("ANNAISSANCE");
     String hobby = resultSet.getString("hobby");
     String responsable = resultSet.getString("responsable");
     int salaire = resultSet.getInt("salaire");
     int prime = resultSet.getInt("prime");
     String pseudo = resultSet.getString("pseudo");
-    Programmeur programmeur = new Programmeur(id, nom, prenom, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo);
+    Programmeur programmeur = new Programmeur(id, nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo);
     return programmeur;
   }
 
@@ -109,23 +110,28 @@ public class ActionBDDImpl {
    */
   public boolean addProgrammeur(Programmeur programmeur) {
     try {
-      PreparedStatement statement = connection.prepareStatement
-          ("INSERT INTO programmeur VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-      statement.setInt(1, programmeur.getId());
-      statement.setString(2, programmeur.getNom());
-      statement.setString(3, programmeur.getPrenom());
+      PreparedStatement statement = connection.prepareStatement(
+          "INSERT INTO programmeur (nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo) " +
+          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      );
+
+      statement.setString(1, programmeur.getNom());
+      statement.setString(2, programmeur.getPrenom());
+      statement.setString(3, programmeur.getAdresse());
       statement.setInt(4, programmeur.getAnneeNaissance());
       statement.setString(5, programmeur.getHobby());
       statement.setString(6, programmeur.getResponsable());
       statement.setInt(7, programmeur.getSalaire());
       statement.setInt(8, programmeur.getPrime());
       statement.setString(9, programmeur.getPseudo());
-      
-      statement.executeQuery();
-      
-      return true;
-      
+
+      int affectedRows = statement.executeUpdate();
+      statement.close();
+
+      return affectedRows == 1;
+
     } catch (SQLException e) {
+      System.err.println("Erreur lors de l'ajout du programmeur : " + e.getMessage());
       return false;
     }
   }
@@ -133,36 +139,37 @@ public class ActionBDDImpl {
   /**
    * Mettre à jour un programmeur
    * @param id l'id du programmeur à mettre à jour
-   * @param programmeur le programmeur contenant les modification
+   * @param programmeur le programmeur contenant les modifications
    * @return true si la requête s'est bien passée, false sinon
    */
   public boolean updateProgrammeur(int id, Programmeur programmeur) {
     try {
-      PreparedStatement statement = connection.prepareStatement
-          ("UPDATE programmeur SET NOM = '?',"
-                                + "PRENOM = '?',"
-                                + "ANNEENAISSANCE = '?',"
-                                + "HOBBY = '?',"
-                                + "RESPONSABLE = '?',"
-                                + "SALAIRE = '?',"
-                                + "PRIME = '?',"
-                                + "PSEUDO = '?'"
-          + "WHERE id = ?;");
-      
+      PreparedStatement statement = connection.prepareStatement(
+          "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, ANNAISSANCE = ?, " +
+          "hobby = ?, responsable = ?, salaire = ?, prime = ?, pseudo = ? " +
+          "WHERE id = ?"
+      );
+
       statement.setString(1, programmeur.getNom());
       statement.setString(2, programmeur.getPrenom());
-      statement.setInt(3, programmeur.getAnneeNaissance());
-      statement.setString(4, programmeur.getHobby());
-      statement.setString(5, programmeur.getResponsable());
-      statement.setInt(6, programmeur.getSalaire());
-      statement.setInt(7, programmeur.getPrime());
-      statement.setString(8, programmeur.getPseudo());
-      statement.setInt(9, programmeur.getId());
-      return true;
-      
+      statement.setString(3, programmeur.getAdresse());
+      statement.setInt(4, programmeur.getAnneeNaissance());
+      statement.setString(5, programmeur.getHobby());
+      statement.setString(6, programmeur.getResponsable());
+      statement.setInt(7, programmeur.getSalaire());
+      statement.setInt(8, programmeur.getPrime());
+      statement.setString(9, programmeur.getPseudo());
+      statement.setInt(10, id); // Use the method parameter id, not programmeur.getId()
+
+      int affectedRows = statement.executeUpdate();
+      statement.close();
+
+      return affectedRows == 1;
+
     } catch (SQLException e) {
+      System.err.println("Erreur lors de la mise à jour du programmeur : " + e.getMessage());
       return false;
-    } 
+    }
   }
 
   public List<Projet> getProjets() {
@@ -178,7 +185,7 @@ public class ActionBDDImpl {
               Date dateFin = resultat.getDate("dateFin");
               Etat etat = Etat.valueOf(resultat.getString("etat"));
               List<Programmeur> programmeurs = getProgrammeursFromProjet(id);
-              Projet projet = new Projet(intitule, dateDebut, dateFin, etat, programmeurs);
+              Projet projet = new Projet(id, intitule, dateDebut, dateFin, etat, programmeurs);
               projets.add(projet);
           }
           resultat.close();
