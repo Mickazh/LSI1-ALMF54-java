@@ -107,8 +107,8 @@ public class MainFrame extends JFrame {
         menuProjet.addSeparator();
         menuProjet.add(ajouterProjet);
 
-        // Menu Fichier
-        JMenu menuFichier = new JMenu("Fichier");
+        // Menu Application
+        JMenu menuApplication = new JMenu("Application");
         
         JMenuItem accueil = new JMenuItem("Accueil");
         accueil.setAccelerator(KeyStroke.getKeyStroke("control H"));
@@ -129,9 +129,9 @@ public class MainFrame extends JFrame {
             }
         });
         
-        menuFichier.add(accueil);
-        menuFichier.addSeparator();
-        menuFichier.add(quitter);
+        menuApplication.add(accueil);
+        menuApplication.addSeparator();
+        menuApplication.add(quitter);
 
         // Menu Aide
         JMenu menuAide = new JMenu("Aide");
@@ -140,7 +140,7 @@ public class MainFrame extends JFrame {
         menuAide.add(aPropos);
 
         // Ajouter les menus à la barre
-        menuBar.add(menuFichier);
+        menuBar.add(menuApplication);
         menuBar.add(menuProgrammeur);
         menuBar.add(menuProjet);
         menuBar.add(menuAide);
