@@ -14,12 +14,14 @@ import entity.Programmeur;
  * Permet d'afficher, ajouter, modifier et supprimer des programmeurs
  */
 public class ProgrammeurPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
     // Constantes pour les actions
     public static final String VIEW_ALL = "VIEW_ALL";
     public static final String VIEW_ONE = "VIEW_ONE";
     public static final String ADD = "ADD";
     public static final String DELETE = "DELETE";
     public static final String UPDATE_SALARY = "UPDATE_SALARY";
+    public static final String UPDATE_PROG = "UPDATE_PROG";    
 
     private ActionBDDImpl actionBDD;
     private CardLayout cardLayout;
@@ -31,6 +33,7 @@ public class ProgrammeurPanel extends JPanel {
     private JPanel addPanel;
     private JPanel deletePanel;
     private JPanel updateSalaryPanel;
+    private JPanel updateProgPanel;
 
     /**
      * Constructeur du panneau programmeur
@@ -55,6 +58,7 @@ public class ProgrammeurPanel extends JPanel {
         addPanel = createAddPanel();
         deletePanel = createDeletePanel();
         updateSalaryPanel = createUpdateSalaryPanel();
+        updateProgPanel = createUpdateProgPanel();
 
         // Ajouter les panneaux au CardLayout
         contentPanel.add(viewAllPanel, VIEW_ALL);
@@ -62,6 +66,7 @@ public class ProgrammeurPanel extends JPanel {
         contentPanel.add(addPanel, ADD);
         contentPanel.add(deletePanel, DELETE);
         contentPanel.add(updateSalaryPanel, UPDATE_SALARY);
+        contentPanel.add(updateProgPanel, UPDATE_PROG);
 
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -159,6 +164,12 @@ public class ProgrammeurPanel extends JPanel {
                 break;
             }
         }
+
+    
+    
+    
+    
+    
     }
 
     /**
@@ -470,6 +481,174 @@ public class ProgrammeurPanel extends JPanel {
         return panel;
     }
 
+    
+    /**
+     * Crée le panneau de modification du programmeur
+     */
+    private JPanel createUpdateProgPanel() {
+      JPanel panel = new JPanel(new BorderLayout());
+      panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+      
+      // Titre
+      JLabel titleLabel = new JLabel("Modifier les informations d'un programmeur",
+                                     SwingConstants.CENTER);
+      titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+      titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+      panel.add(titleLabel, BorderLayout.NORTH);
+      
+      // Panneau central
+      JPanel centerPanel = new JPanel(new GridBagLayout());
+      GridBagConstraints gbc = new GridBagConstraints();
+      gbc.insets = new Insets(10, 10, 10, 10);
+      gbc.fill = GridBagConstraints.HORIZONTAL;
+      
+      // Champ ID
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      centerPanel.add(new JLabel("ID du programmeur :"), gbc);
+      
+      gbc.gridx = 1;
+      JTextField idField = new JTextField(15);
+      centerPanel.add(idField, gbc);
+
+      // Formulaire
+      JPanel formPanel = new JPanel(new GridBagLayout());
+      gbc.insets = new Insets(5, 5, 5, 5);
+      gbc.fill = GridBagConstraints.HORIZONTAL;
+
+      // Champs du formulaire
+      JTextField nomField = new JTextField(20);
+      JTextField prenomField = new JTextField(20);
+      JTextField adresseField = new JTextField(20);
+      JTextField anneeField = new JTextField(20);
+      JTextField hobbyField = new JTextField(20);
+      JTextField responsableField = new JTextField(20);
+      JTextField salaireField = new JTextField(20);
+      JTextField primeField = new JTextField(20);
+      JTextField pseudoField = new JTextField(20);
+
+      // Ajouter les champs
+      int row = 0;
+      addFormField(formPanel, gbc, row++, "Nom :", nomField);
+      addFormField(formPanel, gbc, row++, "Prénom :", prenomField);
+      addFormField(formPanel, gbc, row++, "Adresse :", adresseField);
+      addFormField(formPanel, gbc, row++, "Année de naissance :", anneeField);
+      addFormField(formPanel, gbc, row++, "Hobby :", hobbyField);
+      addFormField(formPanel, gbc, row++, "Responsable :", responsableField);
+      addFormField(formPanel, gbc, row++, "Salaire :", salaireField);
+      addFormField(formPanel, gbc, row++, "Prime :", primeField);
+      addFormField(formPanel, gbc, row++, "Pseudo :", pseudoField);
+
+      formPanel.setVisible(false);
+      centerPanel.add(formPanel, gbc);
+      
+      gbc.gridx = 0;
+      gbc.gridy = 2;
+      gbc.gridwidth = 2;
+      gbc.weighty = 1.0;
+      gbc.fill = GridBagConstraints.BOTH;
+      
+      panel.add(centerPanel, BorderLayout.CENTER);
+      
+      // Boutons
+      JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      
+      JButton searchButton = new JButton("Rechercher");
+      searchButton.addActionListener(e -> {
+        try {
+          int id = Integer.parseInt(idField.getText().trim());
+          Optional<Programmeur> optProg = actionBDD.getProgrammeur(id);
+          
+          if (optProg.isPresent()) {
+            Programmeur p = optProg.get();
+            
+            // Mettre à jour les champs du formulaire avec les données du programmeurs
+            formPanel.setVisible(true);
+            
+            nomField.setText(p.getNom());
+            prenomField.setText(p.getPrenom());
+            adresseField.setText(p.getAdresse());
+            anneeField.setText(String.valueOf(p.getAnneeNaissance()));
+            hobbyField.setText(p.getHobby());
+            responsableField.setText(p.getResponsable());
+            salaireField.setText(String.valueOf(p.getSalaire()));
+            primeField.setText(String.valueOf(p.getPrime()));
+            pseudoField.setText(p.getPseudo());
+          } else {
+            JOptionPane.showMessageDialog(panel, 
+                "Aucun programmeur trouvé avec l'ID " + id, 
+                "Erreur", 
+                JOptionPane.ERROR_MESSAGE);
+          }
+        } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(panel, 
+              "Veuillez entrer un ID valide", 
+              "Erreur", 
+              JOptionPane.ERROR_MESSAGE);
+        }
+      });
+      
+      JButton updateButton = new JButton("Mettre à jour");
+      updateButton.addActionListener(e -> {
+        try {
+          int id = Integer.parseInt(idField.getText().trim());
+          String nouveauNom = nomField.getText().trim();
+          String nouveauPrenom = prenomField.getText().trim();
+          String nouvelleAdresse = adresseField.getText().trim();
+          int nouvelleAnnee = Integer.parseInt(anneeField.getText().trim());
+          String nouveauHobby = hobbyField.getText().trim();
+          String nouveauResponsable = responsableField.getText().trim();
+          int nouveauSalaire = Integer.parseInt(salaireField.getText().trim());
+          int nouvellePrime = Integer.parseInt(primeField.getText().trim());
+          String nouveauPseudo = pseudoField.getText().trim();
+          
+          Optional<Programmeur> optProg = actionBDD.getProgrammeur(id);
+          if (optProg.isPresent()) {
+            Programmeur p = optProg.get();
+            p.setNom(nouveauNom);
+            p.setPrenom(nouveauPrenom);
+            p.setAdresse(nouvelleAdresse);
+            p.setSalaire(nouvelleAnnee);
+            p.setHobby(nouveauHobby);
+            p.setResponsable(nouveauResponsable);
+            p.setSalaire(nouveauSalaire);
+            p.setSalaire(nouvellePrime);
+            p.setPseudo(nouveauPseudo);
+            
+            boolean success = actionBDD.updateProgrammeur(id, p);
+            if (success) {
+              JOptionPane.showMessageDialog(panel, 
+                  "Programmeur mis à jour avec succès!", 
+                  "Succès", 
+                  JOptionPane.INFORMATION_MESSAGE);
+              salaireField.setText("");
+            } else {
+              JOptionPane.showMessageDialog(panel, 
+                  "Erreur lors de la mise à jour du programmeur", 
+                  "Erreur", 
+                  JOptionPane.ERROR_MESSAGE);
+            }
+          } else {
+            JOptionPane.showMessageDialog(panel, 
+                "Programmeur non trouvé avec l'ID " + id, 
+                "Erreur", 
+                JOptionPane.ERROR_MESSAGE);
+          }
+        } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(panel, 
+              "Veuillez entrer des valeurs valides", 
+              "Erreur", 
+              JOptionPane.ERROR_MESSAGE);
+        }
+      });
+      
+      buttonPanel.add(searchButton);
+      buttonPanel.add(updateButton);
+      panel.add(buttonPanel, BorderLayout.SOUTH);
+      
+      return panel;
+    }
+      
     /**
      * Crée le panneau de modification du salaire
      */
@@ -600,6 +779,8 @@ public class ProgrammeurPanel extends JPanel {
     /**
      * Ajoute un champ de formulaire
      */
+
+    
     private void addFormField(JPanel panel, GridBagConstraints gbc, int row, String label, JTextField field) {
         gbc.gridx = 0;
         gbc.gridy = row;

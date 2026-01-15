@@ -15,6 +15,7 @@ import entity.Projet;
  * Permet d'afficher les projets et les programmeurs associés
  */
 public class ProjetPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
     // Constantes pour les actions
     public static final String VIEW_ALL = "VIEW_ALL";
     public static final String VIEW_PROGRAMMERS = "VIEW_PROGRAMMERS";

@@ -9,6 +9,7 @@ import database.ActionBDDImpl;
  * Contient le menu principal et gère la navigation entre les différentes vues
  */
 public class MainFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
     private ActionBDDImpl actionBDD;
     private JPanel contentPanel;
     private CardLayout cardLayout;
@@ -73,15 +74,16 @@ public class MainFrame extends JFrame {
         ajouter.setAccelerator(KeyStroke.getKeyStroke("control 4"));
         ajouter.addActionListener(e -> showProgrammeurPanel(ProgrammeurPanel.ADD));
         
-        JMenuItem modifierSalaire = new JMenuItem("Modifier le salaire");
-        modifierSalaire.setAccelerator(KeyStroke.getKeyStroke("control 5"));
-        modifierSalaire.addActionListener(e -> showProgrammeurPanel(ProgrammeurPanel.UPDATE_SALARY));
+
+        JMenuItem modifierProg = new JMenuItem("Modifier un programmeur");
+        modifierProg.setAccelerator(KeyStroke.getKeyStroke("control 6"));
+        modifierProg.addActionListener(e -> showProgrammeurPanel(ProgrammeurPanel.UPDATE_PROG));
         
         menuProgrammeur.add(afficherTous);
         menuProgrammeur.add(afficherUn);
         menuProgrammeur.addSeparator();
         menuProgrammeur.add(ajouter);
-        menuProgrammeur.add(modifierSalaire);
+        menuProgrammeur.add(modifierProg);
         menuProgrammeur.addSeparator();
         menuProgrammeur.add(supprimer);
 

@@ -8,6 +8,7 @@ import java.awt.*;
  * Affiche les options disponibles sous forme de boutons
  */
 public class MenuPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
     private MainFrame mainFrame;
 
     /**
@@ -68,12 +69,13 @@ public class MenuPanel extends JPanel {
         btnAjouterProgrammeur.addActionListener(e -> 
             mainFrame.showProgrammeurPanel(ProgrammeurPanel.ADD));
 
-        JButton btnModifierSalaire = createMenuButton(
-            "5. Modifier le salaire",
-            "Modifier le salaire d'un programmeur"
+        
+        JButton btnModifierProgrammeur = createMenuButton(
+            "5. Modifier un programmeur",
+            "Modifier les informations d'un programmeur"
         );
-        btnModifierSalaire.addActionListener(e -> 
-            mainFrame.showProgrammeurPanel(ProgrammeurPanel.UPDATE_SALARY));
+        btnModifierProgrammeur.addActionListener(e -> 
+            mainFrame.showProgrammeurPanel(ProgrammeurPanel.UPDATE_PROG));
 
         JButton btnAfficherProjets = createMenuButton(
             "6. Afficher tous les projets",
@@ -121,7 +123,7 @@ public class MenuPanel extends JPanel {
         centerPanel.add(btnAjouterProgrammeur, gbc);
         
         gbc.gridy = 4;
-        centerPanel.add(btnModifierSalaire, gbc);
+        centerPanel.add(btnModifierProgrammeur, gbc);
         
         gbc.gridy = 5;
         centerPanel.add(btnAfficherProjets, gbc);
@@ -131,6 +133,8 @@ public class MenuPanel extends JPanel {
         
         gbc.gridy = 7;
         gbc.insets = new Insets(30, 10, 10, 10);
+
+        gbc.gridy = 9;
         centerPanel.add(btnQuitter, gbc);
 
         add(centerPanel, BorderLayout.CENTER);
@@ -143,7 +147,7 @@ public class MenuPanel extends JPanel {
     }
 
     /**
-     * Crée un bouton de menu avec un style uniforme
+     * Créer un bouton de menu avec un style uniforme
      * @param text Texte du bouton
      * @param tooltip Texte de l'info-bulle
      * @return Le bouton créé
