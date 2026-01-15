@@ -23,6 +23,9 @@ public class ActionBDDImpl implements ActionBDD {
     connect();
   }
 
+  /**
+   * Connexion à la base de données
+   */
   public void connect() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -34,12 +37,14 @@ public class ActionBDDImpl implements ActionBDD {
 
   }
 
+  /**
+   * Récupère l'ensemble des programmeurs
+   * @return La liste de programmeurs
+   */
   public List<Programmeur> getProgrammeurs() {
-    // Create statement
     try {
       Statement statement = connection.createStatement();
-      // Execute query
-      ResultSet resultSet = statement.executeQuery("SELECT * FROM programmeur");
+      ResultSet resultSet = statement.executeQuery("SELECT id, nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo FROM programmeur");
 
       List<Programmeur> programmeurs = new ArrayList<>();
 
@@ -57,6 +62,12 @@ public class ActionBDDImpl implements ActionBDD {
     }
   }
 
+  /**
+   * Créer un programmeur grâce au resultat d'une requête
+   * @param resultSet Le résultat
+   * @return Le pogrammeur à partir du resultSet
+   * @throws SQLException 
+   */
   private Programmeur getProgrammeurFromResultSet(ResultSet resultSet) throws SQLException {
     int id = resultSet.getInt("id");
     String nom = resultSet.getString("nom");
@@ -72,9 +83,14 @@ public class ActionBDDImpl implements ActionBDD {
     return programmeur;
   }
 
+  /**
+   * Obtention d'un programmeur selon son id
+   * @param idProgrammeur L'id du programmeur
+   * @return Le programmeur s'il existe
+   */
   public Optional<Programmeur> getProgrammeur(int idProgrammeur) {
     try {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM programmeur WHERE id = ?");
+      PreparedStatement statement = connection.prepareStatement("SELECT id, nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo FROM programmeur WHERE id = ?");
       statement.setInt(1, idProgrammeur);
       ResultSet resultSet = statement.executeQuery();
 
@@ -89,6 +105,10 @@ public class ActionBDDImpl implements ActionBDD {
 
   }
 
+  /**
+   * @param idProgrammeur L'id du programmeur à supprimer
+   * @return true s'il a été supprimé, false sinon
+   */
   public boolean deleteProgrammeur(int idProgrammeur) {
     try {
       PreparedStatement statement = connection.prepareStatement("DELETE FROM programmeur WHERE id = ?");
@@ -159,7 +179,7 @@ public class ActionBDDImpl implements ActionBDD {
       statement.setInt(7, programmeur.getSalaire());
       statement.setInt(8, programmeur.getPrime());
       statement.setString(9, programmeur.getPseudo());
-      statement.setInt(10, id); // Use the method parameter id, not programmeur.getId()
+      statement.setInt(10, id);
 
       int affectedRows = statement.executeUpdate();
       statement.close();
@@ -199,7 +219,8 @@ public class ActionBDDImpl implements ActionBDD {
 
   public List<Programmeur> getProgrammeursFromProjet(int idProjet) {
     try {
-      String query = "SELECT * FROM programmeur " +
+      String query = "SELECT id, nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo " + 
+                     "FROM programmeur " +
                      "INNER JOIN programmeur_projet ON programmeur.id = programmeur_projet.idProgrammeur " +
                      "WHERE programmeur_projet.idProjet = ?";
       PreparedStatement statement = connection.prepareStatement(query);

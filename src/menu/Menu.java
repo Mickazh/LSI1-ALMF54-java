@@ -15,6 +15,9 @@ public class Menu {
     this.actionBDDImpl = new ActionBDDImpl();
   }
 
+  /**
+   * Boucle principale permettant d'échanger avec l'utilisateur
+   */
   public void start() {
     int choix;
     Scanner scanner = new Scanner(System.in);
@@ -60,6 +63,9 @@ public class Menu {
     } while (true);
   }
 
+  /**
+   * Affichage du menu principal
+   */
   private void afficherMenu() {
     System.out.println("\n************** MENU PRINCIPAL **************");
     System.out.println("1. Afficher tous les programmeurs");
@@ -73,6 +79,10 @@ public class Menu {
     System.out.print("Votre choix : ");
   }
 
+  /**
+   * Permet d'afficher les programmeurs lié à un projet
+   * @param scanner Le scanner permettant de récupérer les inputs utilisateur
+   */
   private void afficherProgrammeursDUnProjet(Scanner scanner) {
     System.out.println("\nAfficher les programmeurs d'un projet");
     System.out.print("Entrez l'ID du projet : ");
@@ -97,6 +107,9 @@ public class Menu {
     }
   }
 
+  /**
+   * Affiche l'ensemble des projets
+   */
   private void afficherProjets() {
     List<entity.Projet> projets = this.actionBDDImpl.getProjets();
     if (projets.isEmpty()) {
@@ -188,6 +201,10 @@ public class Menu {
     }
   }
 
+  /**
+   * Supprime un programmeur selon son id
+   * @param scanner Le scanner permettant de récupérer les inputs utilisateur
+   */
   private void supprimerProgrammeur(Scanner scanner) {
     while (true) {
       System.out.print("Entrez l'id du programmeur à supprimer : ");
@@ -207,6 +224,10 @@ public class Menu {
     }
   }
 
+  /**
+   * Affiche un programmeur selon son id
+   * @param scanner Le scanner permettant de récupérer les inputs utilisateur
+   */
   private void afficherProgrammeur(Scanner scanner) {
     Optional<Programmeur> optionalProgrammeur;
     while (true) {
@@ -227,6 +248,9 @@ public class Menu {
     }
   }
 
+  /**
+   * Affiche tous les programmeurs
+   */
   private void afficherProgrammeurs() {
     List<Programmeur> programmeurs = this.actionBDDImpl.getProgrammeurs();
     for (Programmeur programmeur : programmeurs) {
