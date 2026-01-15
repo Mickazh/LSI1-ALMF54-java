@@ -220,4 +220,88 @@ public class ActionBDDImpl implements ActionBDD {
       return List.of();
     }
   }
+
+  /**
+   * Ajouter un projet
+   * @param projet le projet à ajouter
+   * @return true si l'ajout a réussi, false sinon
+   */
+  public boolean addProjet(Projet projet) {
+    try {
+      // Commencer une transaction
+      connection.setAutoCommit(false);
+
+      // Insérer le projet
+      PreparedStatement projetStatement = connection.prepareStatement(
+          "INSERT INTO projet (intitule, dateDebut, dateFin, etat) VALUES (?, ?, ?, ?)",
+          PreparedStatement.RETURN_GENERATED_KEYS
+      );
+
+      projetStatement.setString(1, projet.getIntitule());
+      projetStatement.setDate(2, new java.sql.Date(projet.getDateDebut().getTime()));
+      projetStatement.setDate(3, new java.sql.Date(projet.getDateFin().getTime()));
+      projetStatement.setString(4, projet.getEtat().toString());
+
+      int affectedRows = projetStatement.executeUpdate();
+
+      if (affectedRows == 0) {
+        connection.rollback();
+        return false;
+      }
+
+      // Récupérer l'ID généré du projet
+      ResultSet generatedKeys = projetStatement.getGeneratedKeys();
+      int projetId = 0;
+      if (generatedKeys.next()) {
+        projetId = generatedKeys.getInt(1);
+      } else {
+        connection.rollback();
+        return false;
+      }
+
+      // Insérer les relations programmeur-projet
+      if (projet.getProgrammeurs() != null && !projet.getProgrammeurs().isEmpty()) {
+        PreparedStatement relationStatement = connection.prepareStatement(
+            "INSERT INTO programmeur_projet (idProgrammeur, idProjet) VALUES (?, ?)"
+        );
+
+        for (Programmeur programmeur : projet.getProgrammeurs()) {
+          relationStatement.setInt(1, programmeur.getId());
+          relationStatement.setInt(2, projetId);
+          relationStatement.addBatch();
+        }
+
+        int[] batchResults = relationStatement.executeBatch();
+        for (int result : batchResults) {
+          if (result == PreparedStatement.EXECUTE_FAILED) {
+            connection.rollback();
+            return false;
+          }
+        }
+
+        relationStatement.close();
+      }
+
+      connection.commit();
+      projetStatement.close();
+      generatedKeys.close();
+
+      return true;
+
+    } catch (SQLException e) {
+      try {
+        connection.rollback();
+      } catch (SQLException rollbackEx) {
+        System.err.println("Erreur lors du rollback : " + rollbackEx.getMessage());
+      }
+      System.err.println("Erreur lors de l'ajout du projet : " + e.getMessage());
+      return false;
+    } finally {
+      try {
+        connection.setAutoCommit(true);
+      } catch (SQLException e) {
+        System.err.println("Erreur lors de la remise en auto-commit : " + e.getMessage());
+      }
+    }
+  }
 }

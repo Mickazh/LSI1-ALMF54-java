@@ -55,4 +55,11 @@ public interface ActionBDD {
      * @return Liste des programmeurs du projet
      */
     List<Programmeur> getProgrammeursFromProjet(int idProjet);
+
+    /**
+     * Ajoute un nouveau projet
+     * @param projet Le projet à ajouter
+     * @return true si l'ajout a réussi, false sinon
+     */
+    boolean addProjet(Projet projet);
 }

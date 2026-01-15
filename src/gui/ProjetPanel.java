@@ -18,6 +18,7 @@ public class ProjetPanel extends JPanel {
     // Constantes pour les actions
     public static final String VIEW_ALL = "VIEW_ALL";
     public static final String VIEW_PROGRAMMERS = "VIEW_PROGRAMMERS";
+    public static final String ADD = "ADD";
 
     private ActionBDDImpl actionBDD;
     private CardLayout cardLayout;
@@ -26,6 +27,7 @@ public class ProjetPanel extends JPanel {
     // Panneaux pour différentes actions
     private JPanel viewAllPanel;
     private JPanel viewProgrammersPanel;
+    private JPanel addPanel;
 
     /**
      * Constructeur du panneau projet
@@ -47,10 +49,12 @@ public class ProjetPanel extends JPanel {
         // Créer les différents panneaux
         viewAllPanel = createViewAllPanel();
         viewProgrammersPanel = createViewProgrammersPanel();
+        addPanel = createAddPanel();
 
         // Ajouter les panneaux au CardLayout
         contentPanel.add(viewAllPanel, VIEW_ALL);
         contentPanel.add(viewProgrammersPanel, VIEW_PROGRAMMERS);
+        contentPanel.add(addPanel, ADD);
 
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -342,7 +346,7 @@ public class ProjetPanel extends JPanel {
      */
     private void loadProgrammeursInTable(DefaultTableModel tableModel, List<Programmeur> programmeurs) {
         tableModel.setRowCount(0);
-        
+
         for (Programmeur p : programmeurs) {
             Object[] row = {
                 p.getId(),
@@ -355,5 +359,148 @@ public class ProjetPanel extends JPanel {
             };
             tableModel.addRow(row);
         }
+    }
+
+    /**
+     * Crée le panneau d'ajout d'un projet
+     */
+    private JPanel createAddPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Titre
+        JLabel titleLabel = new JLabel("Ajouter un nouveau projet", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        // Panneau de formulaire
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Intitulé
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Intitulé :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField intituleField = new JTextField(20);
+        formPanel.add(intituleField, gbc);
+
+        // Date début
+        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Date début (JJ/MM/AAAA) :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField dateDebutField = new JTextField(10);
+        formPanel.add(dateDebutField, gbc);
+
+        // Date fin
+        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Date fin (JJ/MM/AAAA) :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField dateFinField = new JTextField(10);
+        formPanel.add(dateFinField, gbc);
+
+        // État
+        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("État :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JComboBox<entity.Etat> etatComboBox = new JComboBox<>(entity.Etat.values());
+        formPanel.add(etatComboBox, gbc);
+
+        // Programmeurs
+        gbc.gridx = 0; gbc.gridy = 4; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Programmeurs :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.BOTH; gbc.weightx = 1.0; gbc.weighty = 1.0;
+
+        List<Programmeur> allProgrammeurs = actionBDD.getProgrammeurs();
+        JList<Programmeur> programmeurList = new JList<>(allProgrammeurs.toArray(new Programmeur[0]));
+        programmeurList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        programmeurList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Programmeur) {
+                    Programmeur p = (Programmeur) value;
+                    setText(p.getNom() + " " + p.getPrenom() + " (" + p.getPseudo() + ")");
+                }
+                return this;
+            }
+        });
+
+        JScrollPane programmeurScrollPane = new JScrollPane(programmeurList);
+        programmeurScrollPane.setPreferredSize(new Dimension(300, 150));
+        formPanel.add(programmeurScrollPane, gbc);
+
+        panel.add(formPanel, BorderLayout.CENTER);
+
+        // Panneau des boutons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton addButton = new JButton("Ajouter le projet");
+        JButton clearButton = new JButton("Effacer");
+
+        addButton.addActionListener(e -> {
+            try {
+                // Validation des champs
+                String intitule = intituleField.getText().trim();
+                if (intitule.isEmpty()) {
+                    JOptionPane.showMessageDialog(panel, "Veuillez saisir un intitulé pour le projet.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                String dateDebutStr = dateDebutField.getText().trim();
+                String dateFinStr = dateFinField.getText().trim();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                sdf.setLenient(false);
+
+                java.util.Date dateDebut = sdf.parse(dateDebutStr);
+                java.util.Date dateFin = sdf.parse(dateFinStr);
+
+                if (dateDebut.after(dateFin)) {
+                    JOptionPane.showMessageDialog(panel, "La date de début doit être antérieure à la date de fin.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                entity.Etat etat = (entity.Etat) etatComboBox.getSelectedItem();
+                List<Programmeur> selectedProgrammeurs = programmeurList.getSelectedValuesList();
+
+                // Créer le projet
+                Projet projet = new Projet(intitule, dateDebut, dateFin, etat, selectedProgrammeurs);
+
+                // Ajouter à la base de données
+                boolean success = actionBDD.addProjet(projet);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(panel, "Projet ajouté avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+                    // Effacer le formulaire
+                    intituleField.setText("");
+                    dateDebutField.setText("");
+                    dateFinField.setText("");
+                    etatComboBox.setSelectedIndex(0);
+                    programmeurList.clearSelection();
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Erreur lors de l'ajout du projet.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Erreur de validation : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        clearButton.addActionListener(e -> {
+            intituleField.setText("");
+            dateDebutField.setText("");
+            dateFinField.setText("");
+            etatComboBox.setSelectedIndex(0);
+            programmeurList.clearSelection();
+        });
+
+        buttonPanel.add(addButton);
+        buttonPanel.add(clearButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
     }
 }

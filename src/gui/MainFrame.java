@@ -87,17 +87,23 @@ public class MainFrame extends JFrame {
 
         // Menu Projets
         JMenu menuProjet = new JMenu("Projets");
-        
+
         JMenuItem afficherProjets = new JMenuItem("Afficher tous les projets");
         afficherProjets.setAccelerator(KeyStroke.getKeyStroke("control 6"));
         afficherProjets.addActionListener(e -> showProjetPanel(ProjetPanel.VIEW_ALL));
-        
+
         JMenuItem programmeursProjet = new JMenuItem("Programmeurs d'un projet");
         programmeursProjet.setAccelerator(KeyStroke.getKeyStroke("control 7"));
         programmeursProjet.addActionListener(e -> showProjetPanel(ProjetPanel.VIEW_PROGRAMMERS));
-        
+
+        JMenuItem ajouterProjet = new JMenuItem("Ajouter un projet");
+        ajouterProjet.setAccelerator(KeyStroke.getKeyStroke("control 8"));
+        ajouterProjet.addActionListener(e -> showProjetPanel(ProjetPanel.ADD));
+
         menuProjet.add(afficherProjets);
         menuProjet.add(programmeursProjet);
+        menuProjet.addSeparator();
+        menuProjet.add(ajouterProjet);
 
         // Menu Fichier
         JMenu menuFichier = new JMenu("Fichier");
