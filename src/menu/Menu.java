@@ -10,6 +10,8 @@ import entity.Programmeur;
 
 public class Menu {
 
+  private final static int MAX_TRY_COUNT = 3;
+
   private ActionBDD actionBDDImpl;
 
   public Menu() {
@@ -133,7 +135,6 @@ public class Menu {
    * @return true si la modification a réussie, false sinon
    */
   private boolean modifierSalaire(Scanner in) {
-    final int MAX_TRY_COUNT = 3;
 
     Optional<Programmeur> programmeur;
     int tryCount = 1;
@@ -213,6 +214,7 @@ public class Menu {
    * @param scanner Le scanner permettant de récupérer les inputs utilisateur
    */
   private void supprimerProgrammeur(Scanner scanner) {
+    int tryCount = 1;
     while (true) {
       System.out.print("Entrez l'id du programmeur à supprimer : ");
       String idStr = scanner.nextLine().trim();
@@ -223,6 +225,10 @@ public class Menu {
           System.out.println("Programmeur supprimé avec succès.");
           break;
         } else {
+          if (tryCount++ >= MAX_TRY_COUNT) {
+            System.out.println("Trop d'essaie");
+            return;
+          }
           System.out.println("Supression KO. Saisissez à nouveau l'id : ");
         }
       } catch (NumberFormatException e) {
@@ -237,6 +243,7 @@ public class Menu {
    */
   private void afficherProgrammeur(Scanner scanner) {
     Optional<Programmeur> optionalProgrammeur;
+    int tryCount = 1;
     while (true) {
       System.out.print("Entrez l'id du programmeur à afficher : ");
       String idStr = scanner.nextLine().trim();
@@ -247,6 +254,10 @@ public class Menu {
           System.out.println(optionalProgrammeur.get());
           break;
         } else {
+          if (tryCount++ >= MAX_TRY_COUNT) {
+            System.out.println("Trop d'essaie");
+            return;
+          }
           System.out.println("Programmeur non trouvé.");
         }
       } catch (NumberFormatException e) {

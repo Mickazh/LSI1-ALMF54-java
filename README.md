@@ -107,7 +107,6 @@ java -cp "bin:lib/*" gui.MainFrame
 │   └── protobuf-java-3.21.9.jar    # Dépendance protobuf
 ├── bin/                            # Classes compilées
 ├── bdtpjava.sql                    # Script SQL de la base
-├── dump.sql                        # Dump de données exemple
 ├── README.md                       # Ce fichier
 └── .gitignore
 ```
