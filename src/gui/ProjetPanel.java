@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import database.ActionBDDImpl;
+import database.ActionBDD;
 import entity.Programmeur;
 import entity.Projet;
 
@@ -24,7 +24,7 @@ public class ProjetPanel extends JPanel {
     public static final String ADD = "ADD";
     public static final String UPDATE = "UPDATE";
 
-    private ActionBDDImpl actionBDD;
+    private ActionBDD actionBDD;
     private CardLayout cardLayout;
     private JPanel contentPanel;
     
@@ -39,7 +39,7 @@ public class ProjetPanel extends JPanel {
      * Constructeur du panneau projet
      * @param actionBDD Instance de la classe d'accès aux données
      */
-    public ProjetPanel(ActionBDDImpl actionBDD) {
+    public ProjetPanel(ActionBDD actionBDD) {
         this.actionBDD = actionBDD;
         setLayout(new BorderLayout());
         initComponents();

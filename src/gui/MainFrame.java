@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+
+import database.ActionBDD;
 import database.ActionBDDImpl;
 
 /**
@@ -10,7 +12,7 @@ import database.ActionBDDImpl;
  */
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
-    private ActionBDDImpl actionBDD;
+    private ActionBDD actionBDD;
     private JPanel contentPanel;
     private CardLayout cardLayout;
 

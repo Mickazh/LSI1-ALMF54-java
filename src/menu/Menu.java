@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+import database.ActionBDD;
 import database.ActionBDDImpl;
 import entity.Programmeur;
 
 public class Menu {
 
-  private ActionBDDImpl actionBDDImpl;
+  private ActionBDD actionBDDImpl;
 
   public Menu() {
     this.actionBDDImpl = new ActionBDDImpl();

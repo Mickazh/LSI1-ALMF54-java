@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
-import database.ActionBDDImpl;
+import database.ActionBDD;
 import entity.Programmeur;
 
 /**
@@ -23,7 +23,7 @@ public class ProgrammeurPanel extends JPanel {
     public static final String UPDATE_SALARY = "UPDATE_SALARY";
     public static final String UPDATE_PROG = "UPDATE_PROG";    
 
-    private ActionBDDImpl actionBDD;
+    private ActionBDD actionBDD;
     private CardLayout cardLayout;
     private JPanel contentPanel;
     
@@ -39,7 +39,7 @@ public class ProgrammeurPanel extends JPanel {
      * Constructeur du panneau programmeur
      * @param actionBDD Instance de la classe d'accès aux données
      */
-    public ProgrammeurPanel(ActionBDDImpl actionBDD) {
+    public ProgrammeurPanel(ActionBDD actionBDD) {
         this.actionBDD = actionBDD;
         setLayout(new BorderLayout());
         initComponents();
