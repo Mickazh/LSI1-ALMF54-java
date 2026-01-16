@@ -1,7 +1,12 @@
 package entity;
 
+import java.time.Year;
 
 public class Programmeur {
+
+  public static final int anneeNaissanceMin = 1900;
+  public static final int anneeNaissanceMax = Year.now().getValue();
+
     private int id;
     private String nom;
     private String prenom;

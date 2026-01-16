@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 public class Projet {
+
+    public static final String dateDebutMin = "01/01/1900";
+    public static final String dateDebutMax = "01/01/2100";
+
     private int id;
     private String intitule;
     private Date dateDebut;

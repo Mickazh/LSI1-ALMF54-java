@@ -37,16 +37,6 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
-
-        // Icône de l'application (optionnel)
-        try {
-            java.net.URL iconURL = getClass().getResource("/icon.png");
-            if (iconURL != null) {
-                setIconImage(Toolkit.getDefaultToolkit().createImage(iconURL));
-            }
-        } catch (Exception e) {
-            // Pas d'icône disponible
-        }
     }
 
     /**
@@ -102,10 +92,14 @@ public class MainFrame extends JFrame {
         ajouterProjet.setAccelerator(KeyStroke.getKeyStroke("control 8"));
         ajouterProjet.addActionListener(e -> showProjetPanel(ProjetPanel.ADD));
 
+        JMenuItem updateProjet = new JMenuItem("Mettre à jour un projet");
+        updateProjet.addActionListener(e -> showProjetPanel(ProjetPanel.UPDATE));
+
         menuProjet.add(afficherProjets);
         menuProjet.add(programmeursProjet);
         menuProjet.addSeparator();
         menuProjet.add(ajouterProjet);
+        menuProjet.add(updateProjet);
 
         // Menu Application
         JMenu menuApplication = new JMenu("Application");

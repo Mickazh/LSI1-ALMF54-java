@@ -222,6 +222,7 @@ public class ProgrammeurPanel extends JPanel {
                         "ID             : " + p.getId() + "\n" +
                         "Nom            : " + p.getNom() + "\n" +
                         "Prénom         : " + p.getPrenom() + "\n" +
+                        "Adresse        : " + p.getAdresse() + "\n" +
                         "Année naissance: " + p.getAnneeNaissance() + "\n" +
                         "Hobby          : " + p.getHobby() + "\n" +
                         "Responsable    : " + p.getResponsable() + "\n" +
@@ -300,12 +301,16 @@ public class ProgrammeurPanel extends JPanel {
         JButton saveButton = new JButton("Enregistrer");
         saveButton.addActionListener(e -> {
             try {
+                var anneeNaissance = Integer.parseInt(anneeField.getText().trim());
+                if (anneeNaissance < Programmeur.anneeNaissanceMin || anneeNaissance > Programmeur.anneeNaissanceMax) {
+                    throw new NumberFormatException();
+                }
                 Programmeur prog = new Programmeur(
                     0,
                     nomField.getText().trim(),
                     prenomField.getText().trim(),
                     adresseField.getText().trim(),
-                    Integer.parseInt(anneeField.getText().trim()),
+                    anneeNaissance,
                     hobbyField.getText().trim(),
                     responsableField.getText().trim(),
                     Integer.parseInt(salaireField.getText().trim()),
@@ -337,7 +342,7 @@ public class ProgrammeurPanel extends JPanel {
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(panel, 
-                    "Veuillez entrer des valeurs valides pour l'année, le salaire et la prime", 
+                    "Veuillez entrer des valeurs valides pour l'année (compris entre "+ Programmeur.anneeNaissanceMin + " et "+ Programmeur.anneeNaissanceMax +"), le salaire et la prime", 
                     "Erreur", 
                     JOptionPane.ERROR_MESSAGE);
             }
@@ -596,6 +601,10 @@ public class ProgrammeurPanel extends JPanel {
           String nouveauPrenom = prenomField.getText().trim();
           String nouvelleAdresse = adresseField.getText().trim();
           int nouvelleAnnee = Integer.parseInt(anneeField.getText().trim());
+
+          if (nouvelleAnnee < Programmeur.anneeNaissanceMin || nouvelleAnnee > Programmeur.anneeNaissanceMax) {
+              throw new NumberFormatException();
+          }
           String nouveauHobby = hobbyField.getText().trim();
           String nouveauResponsable = responsableField.getText().trim();
           int nouveauSalaire = Integer.parseInt(salaireField.getText().trim());
@@ -621,7 +630,6 @@ public class ProgrammeurPanel extends JPanel {
                   "Programmeur mis à jour avec succès!", 
                   "Succès", 
                   JOptionPane.INFORMATION_MESSAGE);
-              salaireField.setText("");
             } else {
               JOptionPane.showMessageDialog(panel, 
                   "Erreur lors de la mise à jour du programmeur", 

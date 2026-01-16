@@ -62,4 +62,12 @@ public interface ActionBDD {
      * @return true si l'ajout a réussi, false sinon
      */
     boolean addProjet(Projet projet);
+
+    /**
+     * Mise à jour d'un projet
+     * @param idProjet Le projet à mettre à jour
+     * @param projet   Les nouvelles données
+     * @return true si l'objet et mis à jour, false sinon
+     */
+    boolean updateProjet(int idProjet, Projet projet);
 }

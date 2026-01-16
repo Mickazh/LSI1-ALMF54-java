@@ -325,4 +325,82 @@ public class ActionBDDImpl implements ActionBDD {
       }
     }
   }
+
+  @Override
+  public boolean updateProjet(int idProjet, Projet projet) {
+    try {
+      // Commencer une transaction
+      connection.setAutoCommit(false);
+
+      // Mettre à jour le projet
+      PreparedStatement projetStatement = connection.prepareStatement(
+          "UPDATE projet SET intitule = ?, dateDebut = ?, dateFin = ?, etat = ? WHERE id = ?"
+      );
+
+      projetStatement.setString(1, projet.getIntitule());
+      projetStatement.setDate(2, new java.sql.Date(projet.getDateDebut().getTime()));
+      projetStatement.setDate(3, new java.sql.Date(projet.getDateFin().getTime()));
+      projetStatement.setString(4, projet.getEtat().toString());
+      projetStatement.setInt(5, idProjet);
+
+      int affectedRows = projetStatement.executeUpdate();
+
+      if (affectedRows == 0) {
+        connection.rollback();
+        return false;
+      }
+
+      // Supprimer les anciennes relations programmeur-projet
+      PreparedStatement deleteRelationStatement = connection.prepareStatement(
+          "DELETE FROM programmeur_projet WHERE idProjet = ?"
+      );
+      deleteRelationStatement.setInt(1, idProjet);
+      deleteRelationStatement.executeUpdate();
+      deleteRelationStatement.close();
+
+      // Insérer les nouvelles relations programmeur-projet
+      if (projet.getProgrammeurs() != null && !projet.getProgrammeurs().isEmpty()) {
+        PreparedStatement insertRelationStatement = connection.prepareStatement(
+            "INSERT INTO programmeur_projet (idProgrammeur, idProjet) VALUES (?, ?)"
+        );
+
+        for (Programmeur programmeur : projet.getProgrammeurs()) {
+          insertRelationStatement.setInt(1, programmeur.getId());
+          insertRelationStatement.setInt(2, idProjet);
+          insertRelationStatement.addBatch();
+        }
+
+        int[] batchResults = insertRelationStatement.executeBatch();
+        for (int result : batchResults) {
+          if (result == PreparedStatement.EXECUTE_FAILED) {
+            connection.rollback();
+            return false;
+          }
+        }
+
+        insertRelationStatement.close();
+      }
+
+      connection.commit();
+      projetStatement.close();
+
+      return true;
+
+    } catch (SQLException e) {
+      try {
+        connection.rollback();
+      } catch (SQLException rollbackEx) {
+        System.err.println("Erreur lors du rollback : " + rollbackEx.getMessage());
+      }
+      System.err.println("Erreur lors de la mise à jour du projet : " + e.getMessage());
+      return false;
+    } finally {
+      try {
+        connection.setAutoCommit(true);
+      } catch (SQLException e) {
+        System.err.println("Erreur lors de la remise en auto-commit : " + e.getMessage());
+      }
+    }
+  }
+
 }

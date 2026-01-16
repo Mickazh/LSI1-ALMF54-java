@@ -4,7 +4,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import database.ActionBDDImpl;
 import entity.Programmeur;
@@ -20,6 +22,7 @@ public class ProjetPanel extends JPanel {
     public static final String VIEW_ALL = "VIEW_ALL";
     public static final String VIEW_PROGRAMMERS = "VIEW_PROGRAMMERS";
     public static final String ADD = "ADD";
+    public static final String UPDATE = "UPDATE";
 
     private ActionBDDImpl actionBDD;
     private CardLayout cardLayout;
@@ -29,7 +32,9 @@ public class ProjetPanel extends JPanel {
     private JPanel viewAllPanel;
     private JPanel viewProgrammersPanel;
     private JPanel addPanel;
+    private JPanel updatePanel;
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     /**
      * Constructeur du panneau projet
      * @param actionBDD Instance de la classe d'accès aux données
@@ -51,11 +56,13 @@ public class ProjetPanel extends JPanel {
         viewAllPanel = createViewAllPanel();
         viewProgrammersPanel = createViewProgrammersPanel();
         addPanel = createAddPanel();
+        updatePanel = createUpdatePanel();
 
         // Ajouter les panneaux au CardLayout
         contentPanel.add(viewAllPanel, VIEW_ALL);
         contentPanel.add(viewProgrammersPanel, VIEW_PROGRAMMERS);
         contentPanel.add(addPanel, ADD);
+        contentPanel.add(updatePanel, UPDATE);
 
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -500,6 +507,205 @@ public class ProjetPanel extends JPanel {
 
         buttonPanel.add(addButton);
         buttonPanel.add(clearButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private JPanel createUpdatePanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Titre
+        JLabel titleLabel = new JLabel("Mettre un jour un projet", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        
+        // Champ ID
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        centerPanel.add(new JLabel("ID du projet :"), gbc);
+        
+        gbc.gridx = 1;
+        JTextField idField = new JTextField(15);
+        centerPanel.add(idField, gbc);
+
+        // Panneau de formulaire
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Intitulé
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Intitulé :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField intituleField = new JTextField(20);
+        formPanel.add(intituleField, gbc);
+
+        // Date début
+        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Date début (JJ/MM/AAAA) :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField dateDebutField = new JTextField(10);
+        formPanel.add(dateDebutField, gbc);
+
+        // Date fin
+        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Date fin (JJ/MM/AAAA) :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JTextField dateFinField = new JTextField(10);
+        formPanel.add(dateFinField, gbc);
+
+        // État
+        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("État :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+        JComboBox<entity.Etat> etatComboBox = new JComboBox<>(entity.Etat.values());
+        formPanel.add(etatComboBox, gbc);
+
+        // Programmeurs
+        gbc.gridx = 0; gbc.gridy = 4; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        formPanel.add(new JLabel("Programmeurs :"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.BOTH; gbc.weightx = 1.0; gbc.weighty = 1.0;
+
+        List<Programmeur> allProgrammeurs = actionBDD.getProgrammeurs();
+        JList<Programmeur> programmeurList = new JList<>(allProgrammeurs.toArray(new Programmeur[0]));
+        programmeurList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        programmeurList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Programmeur) {
+                    Programmeur p = (Programmeur) value;
+                    setText(p.getNom() + " " + p.getPrenom() + " (" + p.getPseudo() + ")");
+                }
+                return this;
+            }
+        });
+
+        JScrollPane programmeurScrollPane = new JScrollPane(programmeurList);
+        programmeurScrollPane.setPreferredSize(new Dimension(300, 150));
+        formPanel.add(programmeurScrollPane, gbc);
+
+
+        formPanel.setVisible(false);
+        centerPanel.add(formPanel, gbc);
+
+        panel.add(centerPanel, BorderLayout.CENTER);
+        // panel.add(formPanel, BorderLayout.CENTER);
+        // Panneau des boutons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton updateButton = new JButton("Mise à jour le projet");
+        JButton clearButton = new JButton("Effacer");
+        JButton searchButton = new JButton("Rechercher");
+        searchButton.addActionListener(e -> {
+        try {
+          int id = Integer.parseInt(idField.getText().trim());
+          List<Projet> projets = actionBDD.getProjets();
+          Optional<Projet> projet = projets.stream().filter(p -> p.getId() == id).findFirst();
+          
+          if (projet.isPresent()) {
+            Projet p = projet.get();
+            
+            // Mettre à jour les champs du formulaire avec les données du programmeurs
+            formPanel.setVisible(true);
+            
+            intituleField.setText(p.getIntitule());
+            dateDebutField.setText(sdf.format(p.getDateDebut()));
+            dateFinField.setText(sdf.format(p.getDateFin()));
+            etatComboBox.setSelectedItem(p.getEtat());
+            List<Programmeur> allProgrammeursList = actionBDD.getProgrammeurs();
+            List<Integer> programmeursInProject = p.getProgrammeurs().stream().map(prog -> prog.getId()).toList();
+            List<Integer> selectedIndex = new ArrayList<>();
+            for (int i = 0; i < allProgrammeursList.size(); i++) {
+                if (programmeursInProject.contains(allProgrammeursList.get(i).getId())) {
+                    selectedIndex.add(i);
+                }
+            }
+            programmeurList.setSelectedIndices(selectedIndex.stream().mapToInt(Integer::intValue).toArray());
+          } else {
+            JOptionPane.showMessageDialog(panel, 
+                "Aucun projet trouvé avec l'ID " + id, 
+                "Erreur", 
+                JOptionPane.ERROR_MESSAGE);
+          }
+        } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(panel, 
+              "Veuillez entrer un ID valide", 
+              "Erreur", 
+              JOptionPane.ERROR_MESSAGE);
+        }
+      });
+        updateButton.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(idField.getText().trim());
+                // Validation des champs
+                String intitule = intituleField.getText().trim();
+                if (intitule.isEmpty()) {
+                    JOptionPane.showMessageDialog(panel, "Veuillez saisir un intitulé pour le projet.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                String dateDebutStr = dateDebutField.getText().trim();
+                String dateFinStr = dateFinField.getText().trim();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                sdf.setLenient(false);
+
+                java.util.Date dateDebut = sdf.parse(dateDebutStr);
+                java.util.Date dateFin = sdf.parse(dateFinStr);
+                
+                // Vérification des dates
+                if (dateDebut.before(sdf.parse(Projet.dateDebutMin)) ||
+                    dateDebut.after(sdf.parse(Projet.dateDebutMax)) ||
+                    dateFin.before(sdf.parse(Projet.dateDebutMin)) ||
+                    dateFin.after(sdf.parse(Projet.dateDebutMax))) {
+                        JOptionPane.showMessageDialog(panel, "La date de début ou fin n'est pas entre" + Projet.dateDebutMin + " et " + Projet.dateDebutMax, "Erreur", JOptionPane.ERROR_MESSAGE);
+                    }
+                if (dateDebut.after(dateFin)) {
+                    JOptionPane.showMessageDialog(panel, "La date de début doit être antérieure à la date de fin.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                entity.Etat etat = (entity.Etat) etatComboBox.getSelectedItem();
+                List<Programmeur> selectedProgrammeurs = programmeurList.getSelectedValuesList();
+
+                // Créer le projet
+                Projet projet = new Projet(intitule, dateDebut, dateFin, etat, selectedProgrammeurs);
+
+                // Ajouter à la base de données
+                boolean success = actionBDD.updateProjet(id, projet);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(panel, "Projet mis à jour avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Erreur lors de la mise à jour du projet.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Erreur de validation : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        clearButton.addActionListener(e -> {
+            intituleField.setText("");
+            dateDebutField.setText("");
+            dateFinField.setText("");
+            etatComboBox.setSelectedIndex(0);
+            programmeurList.clearSelection();
+        });
+
+        buttonPanel.add(updateButton);
+        buttonPanel.add(clearButton);
+        buttonPanel.add(searchButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         return panel;
