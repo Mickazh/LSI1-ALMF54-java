@@ -132,8 +132,10 @@ public class Menu {
    * @return true si la modification a réussie, false sinon
    */
   private boolean modifierSalaire(Scanner in) {
+    final int MAX_TRY_COUNT = 3;
 
     Optional<Programmeur> programmeur;
+    int tryCount = 0;
     try {
       do {
         System.out.println("Id du programmeur: ");
@@ -141,7 +143,7 @@ public class Menu {
         int id = Integer.parseInt(idStr);
 
         programmeur = actionBDDImpl.getProgrammeur(id);
-      } while (programmeur.isEmpty());
+      } while (programmeur.isEmpty() && tryCount < MAX_TRY_COUNT);
 
         Programmeur p = programmeur.get();
 
