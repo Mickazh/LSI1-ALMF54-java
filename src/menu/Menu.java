@@ -135,7 +135,7 @@ public class Menu {
     final int MAX_TRY_COUNT = 3;
 
     Optional<Programmeur> programmeur;
-    int tryCount = 0;
+    int tryCount = 1;
     try {
       do {
         System.out.println("Id du programmeur: ");
@@ -143,7 +143,11 @@ public class Menu {
         int id = Integer.parseInt(idStr);
 
         programmeur = actionBDDImpl.getProgrammeur(id);
-      } while (programmeur.isEmpty() && tryCount < MAX_TRY_COUNT);
+        if (tryCount++ >= MAX_TRY_COUNT) {
+          System.out.println("Trop de tentative");
+          return false;
+        }
+      } while (programmeur.isEmpty());
 
         Programmeur p = programmeur.get();
 
