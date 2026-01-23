@@ -13,8 +13,8 @@ Ce projet permet de gérer une base de données de programmeurs et de projets. I
 
 ## Prérequis
 
-- Java 8 ou supérieur
-- MySQL Server 5.7 ou supérieur
+- Java
+- MySQL Server
 - MySQL Connector/J (inclus dans le dossier `lib/`)
 
 ## Installation
@@ -28,8 +28,7 @@ Ce projet permet de gérer une base de données de programmeurs et de projets. I
 mysql -u root -p < bdtpjava.sql
 ```
 
-Ou depuis phpMyAdmin :
-- Importer le fichier `bdtpjava.sql`
+Ou importez la base de données depuis un explorateur de base de données comme PhpMyAdmin 
 
 **Note :** La base de données utilise les paramètres de connexion suivants :
 - URL : `jdbc:mysql://localhost:3306/bdtpjava`
@@ -47,7 +46,7 @@ Le projet peut être compilé manuellement ou avec un IDE.
 mkdir -p bin
 
 # Compiler les sources
-javac -cp "lib/*:." -d bin src/*/*.java src/*/*/*.java
+javac -cp "lib/*." -d bin src/**/*.java
 ```
 
 ## Lancement de l'application
@@ -55,15 +54,30 @@ javac -cp "lib/*:." -d bin src/*/*.java src/*/*/*.java
 ### Version Console
 
 ```bash
-# Depuis la racine du projet
+# Depuis la racine du projet sur un système UNIX
 java -cp "bin:lib/*" main.Start
+
+# Depuis la racine du projet sur un système Windows
+java -cp "bin:lib/*" main.Start
+```
+
+Le projet peut également être lancé avec le jar
+```bash
+java -jar GestionProjets-Terminal.jar
 ```
 
 ### Version Interface Graphique
 
 ```bash
-# Depuis la racine du projet
+# Depuis la racine du projet sur un système UNIX
 java -cp "bin:lib/*" gui.MainFrame
+# Depuis la racine du projet sur un système Windows
+java -cp "bin;lib/*" gui.MainFrame
+```
+
+Le projet peut également être lancé avec le jar
+```bash
+java -jar GestionProjets-GUI.jar
 ```
 ## Fonctionnalités
 
@@ -103,11 +117,9 @@ java -cp "bin:lib/*" gui.MainFrame
 │       ├── Projet.java             # Classe Projet
 │       └── Etat.java               # Énumération État
 ├── lib/
-│   ├── mysql-connector-j-8.2.0.jar # Driver MySQL
-│   └── protobuf-java-3.21.9.jar    # Dépendance protobuf
+│   ├── mysql-connector-java-9.5.0.jar # Driver MySQL
 ├── bin/                            # Classes compilées
 ├── bdtpjava.sql                    # Script SQL de la base
-├── README.md                       # Ce fichier
 └── .gitignore
 ```
 
@@ -127,22 +139,8 @@ L'application se connecte à MySQL avec les paramètres codés en dur :
 
 ## Technologies utilisées
 
-- Java 8+
-- MySQL 5.7+
-- JDBC
-- Swing (pour l'interface graphique)
-
-## Développement
-
-### Avec un IDE
-1. Ouvrir le projet dans votre IDE (Eclipse, IntelliJ IDEA, VS Code)
-2. Ajouter le JAR MySQL Connector au classpath
-3. Compiler et exécuter `main.Start` ou `gui.MainFrame`
-
-### Avec VS Code
-- Installer l'extension Java
-- Ouvrir le dossier du projet
-- Utiliser les tâches de build intégrées
+- Java swing car elle fait partie de la librairie standard
+- MySQL car nous avions l'habitude
 
 ## Dépannage
 
@@ -152,8 +150,11 @@ L'application se connecte à MySQL avec les paramètres codés en dur :
 
 ### Erreurs de compilation
 - Vérifier que le classpath inclut `lib/*`
-- S'assurer que Java 8+ est installé
 
-### Port MySQL occupé
-- Vérifier qu'aucun autre service n'utilise le port 3306
-- Modifier le port dans la configuration si nécessaire
+## Générer la javadoc à partir de la documentation
+
+```bash
+cd src
+javadoc -d ../docs -sourcepath ./ -subpackages *
+```
+Puis, il suffit d'ouvrir `docs/index.html` dans un navigateur
