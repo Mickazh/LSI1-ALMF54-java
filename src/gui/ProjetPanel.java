@@ -512,6 +512,10 @@ public class ProjetPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Crée le JPanel de mise à jour d'un projet.
+     * Permet de modifier les informations d'un projet existant.
+     */
     private JPanel createUpdatePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

@@ -8,6 +8,10 @@ import database.ActionBDD;
 import database.ActionBDDImpl;
 import entity.Programmeur;
 
+/**
+ * Classe gérant l'interface en ligne de commande pour l'application de gestion.
+ * Permet à l'utilisateur d'interagir avec le système via un menu textuel.
+ */
 public class Menu {
 
   private final static int MAX_TRY_COUNT = 3;

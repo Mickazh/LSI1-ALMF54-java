@@ -785,10 +785,13 @@ public class ProgrammeurPanel extends JPanel {
     }
 
     /**
-     * Ajoute un champ de formulaire
+     * Ajoute un champ de formulaire avec son label dans un pannel.
+     * @param panel Le pannel où ajouter le champ
+     * @param gbc Les contraintes GridBag pour le positionnement
+     * @param row La ligne où positionner le champ
+     * @param label Le texte du label
+     * @param field Le champ de texte à ajouter
      */
-
-    
     private void addFormField(JPanel panel, GridBagConstraints gbc, int row, String label, JTextField field) {
         gbc.gridx = 0;
         gbc.gridy = row;

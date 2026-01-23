@@ -3,6 +3,10 @@ package entity;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Représente un projet dans le système de gestion.
+ * Un projet possède un intitulé, des dates de début et fin, un état et une liste de programmeurs affectés.
+ */
 public class Projet {
 
     public static final String dateDebutMin = "01/01/1900";
@@ -16,11 +20,12 @@ public class Projet {
     private List<Programmeur> programmeurs;
 
     /**
-     * @param intitule
-     * @param dateDebut
-     * @param dateFin
-     * @param etat
-     * @param programmeurs
+     * Constructeur sans identifiant car auto incrémenté dans la base.
+     * @param intitule L'intitulé du projet
+     * @param dateDebut La date de début du projet
+     * @param dateFin La date de fin du projet
+     * @param etat L'état du projet
+     * @param programmeurs La liste des programmeurs affectés au projet
      */
     public Projet(String intitule, Date dateDebut, Date dateFin, Etat etat, List<Programmeur> programmeurs) {
         super();
@@ -32,13 +37,14 @@ public class Projet {
     }
 
     /**
-     * 
-     * @param id
-     * @param intitule
-     * @param dateDebut
-     * @param dateFin
-     * @param etat
-     * @param programmeurs
+     * Constructeur avec identifiant.
+     * Utilisé lors du chargement d'un projet existant depuis la base de données.
+     * @param id L'identifiant unique du projet
+     * @param intitule L'intitulé du projet
+     * @param dateDebut La date de début du projet
+     * @param dateFin La date de fin du projet
+     * @param etat L'état du projet
+     * @param programmeurs La liste des programmeurs affectés au projet
      */
     public Projet(int id, String intitule, Date dateDebut, Date dateFin, Etat etat, List<Programmeur> programmeurs) {
         this.id = id;
@@ -53,61 +59,71 @@ public class Projet {
 
 
     /**
-     * @return the intitule
+     * Retourne l'intitulé du projet.
+     * @return L'intitulé du projet
      */
     public String getIntitule() {
         return intitule;
     }
     /**
-     * @param intitule the intitule to set
+     * Définit l'intitulé du projet.
+     * @param intitule Le nouvel intitulé du projet
      */
     public void setIntitule(String intitule) {
         this.intitule = intitule;
     }
     /**
-     * @return the dateDebut
+     * Retourne la date de début du projet.
+     * @return La date de début du projet
      */
     public Date getDateDebut() {
         return dateDebut;
     }
     /**
-     * @param dateDebut the dateDebut to set
+     * Définit la date de début du projet.
+     * @param dateDebut La nouvelle date de début du projet
      */
     public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
     }
     /**
-     * @return the dateFin
+     * Retourne la date de fin du projet.
+     * @return La date de fin du projet
      */
     public Date getDateFin() {
         return dateFin;
     }
     /**
-     * @param dateFin the dateFin to set
+     * Définit la date de fin du projet.
+     * @param dateFin La nouvelle date de fin du projet
      */
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
     /**
-     * @return the etat
+     * Retourne l'état du projet.
+     * @return L'état du projet
      */
     public Etat getEtat() {
         return etat;
     }
     /**
-     * @param etat the etat to set
+     * Définit l'état du projet.
+     * @param etat Le nouvel état du projet
      */
     public void setEtat(Etat etat) {
         this.etat = etat;
     }
     /**
-     * @return the programmeurs
+     * Retourne la liste des programmeurs affectés au projet.
+     * @return La liste des programmeurs du projet
      */
     public List<Programmeur> getProgrammeurs() {
         return programmeurs;
     }
     /**
-     * @param programmeurs the programmeurs to set
+     * Définit la liste des programmeurs affectés au projet.
+     * @param programmeurs La nouvelle liste des programmeurs du projet
      */
     public void setProgrammeurs(List<Programmeur> programmeurs) {
         this.programmeurs = programmeurs;
@@ -115,13 +131,15 @@ public class Projet {
 
 
     /**
-     * @return the id
+     * Retourne l'identifiant du projet.
+     * @return L'identifiant du projet
      */
     public int getId() {
         return id;
     }
     /**
-     * @param id the id to set
+     * Définit l'identifiant du projet.
+     * @param id Le nouvel identifiant du projet
      */
     public void setId(int id) {
         this.id = id;

@@ -2,6 +2,10 @@ package entity;
 
 import java.time.Year;
 
+/**
+ * Représente un programmeur dans le système de gestion de projets.
+ * Un programmeur possède des informations personnelles et professionnelles.
+ */
 public class Programmeur {
 
   public static final int anneeNaissanceMin = 1900;
@@ -19,21 +23,22 @@ public class Programmeur {
     private String pseudo;
     
     /**
-     * 
+     * Constructeur par défaut.
      */
     public Programmeur() {}
     
     /**
-     * @param id
-     * @param nom
-     * @param prenom
-     * @param adresse
-     * @param anneeNaissance
-     * @param hobby
-     * @param responsable
-     * @param salaire
-     * @param prime
-     * @param pseudo
+     * Constructeur avec tous les paramètres.
+     * @param id L'identifiant unique du programmeur
+     * @param nom Le nom du programmeur
+     * @param prenom Le prénom du programmeur
+     * @param adresse L'adresse du programmeur
+     * @param anneeNaissance L'année de naissance du programmeur
+     * @param hobby Le hobby du programmeur
+     * @param responsable Le responsable du programmeur
+     * @param salaire Le salaire du programmeur
+     * @param prime La prime du programmeur
+     * @param pseudo Le pseudo du programmeur
      */
     public Programmeur(int id, String nom, String prenom, String adresse, int anneeNaissance,
                        String hobby, String responsable,
@@ -52,7 +57,8 @@ public class Programmeur {
 
 
     /**
-     * @return the nom
+     * Retourne le nom du programmeur.
+     * @return Le nom du programmeur
      */
     public String getNom() {
       return nom;
@@ -60,7 +66,8 @@ public class Programmeur {
 
 
     /**
-     * @param nom the nom to set
+     * Définit le nom du programmeur.
+     * @param nom Le nouveau nom du programmeur
      */
     public void setNom(String nom) {
       this.nom = nom;
@@ -68,7 +75,8 @@ public class Programmeur {
 
 
     /**
-     * @return the prenom
+     * Retourne le prénom du programmeur.
+     * @return Le prénom du programmeur
      */
     public String getPrenom() {
       return prenom;
@@ -76,7 +84,8 @@ public class Programmeur {
 
 
     /**
-     * @param prenom the prenom to set
+     * Définit le prénom du programmeur.
+     * @param prenom Le nouveau prénom du programmeur
      */
     public void setPrenom(String prenom) {
       this.prenom = prenom;
@@ -84,7 +93,8 @@ public class Programmeur {
 
 
     /**
-     * @return the anneeNaissance
+     * Retourne l'année de naissance du programmeur.
+     * @return L'année de naissance du programmeur
      */
     public int getAnneeNaissance() {
       return anneeNaissance;
@@ -92,7 +102,8 @@ public class Programmeur {
 
 
     /**
-     * @param anneeNaissance the anneeNaissance to set
+     * Définit l'année de naissance du programmeur.
+     * @param anneeNaissance La nouvelle année de naissance du programmeur
      */
     public void setAnneeNaissance(int anneeNaissance) {
       this.anneeNaissance = anneeNaissance;
@@ -100,7 +111,8 @@ public class Programmeur {
 
 
     /**
-     * @return the salaire
+     * Retourne le salaire du programmeur.
+     * @return Le salaire du programmeur
      */
     public int getSalaire() {
       return salaire;
@@ -108,7 +120,8 @@ public class Programmeur {
 
 
     /**
-     * @param salaire the salaire to set
+     * Définit le salaire du programmeur.
+     * @param salaire Le nouveau salaire du programmeur
      */
     public void setSalaire(int salaire) {
       this.salaire = salaire;
@@ -116,7 +129,8 @@ public class Programmeur {
 
 
     /**
-     * @return the prime
+     * Retourne la prime du programmeur.
+     * @return La prime du programmeur
      */
     public int getPrime() {
       return prime;
@@ -124,7 +138,8 @@ public class Programmeur {
 
 
     /**
-     * @param prime the prime to set
+     * Définit la prime du programmeur.
+     * @param prime La nouvelle prime du programmeur
      */
     public void setPrime(int prime) {
       this.prime = prime;
@@ -132,7 +147,8 @@ public class Programmeur {
 
 
     /**
-     * @return the pseudo
+     * Retourne le pseudo du programmeur.
+     * @return Le pseudo du programmeur
      */
     public String getPseudo() {
       return pseudo;
@@ -140,7 +156,8 @@ public class Programmeur {
 
 
     /**
-     * @param pseudo the pseudo to set
+     * Définit le pseudo du programmeur.
+     * @param pseudo Le nouveau pseudo du programmeur
      */
     public void setPseudo(String pseudo) {
       this.pseudo = pseudo;
@@ -148,7 +165,8 @@ public class Programmeur {
 
 
     /**
-     * @return the id
+     * Retourne l'identifiant du programmeur.
+     * @return L'identifiant du programmeur
      */
     public int getId() {
       return id;
@@ -156,49 +174,56 @@ public class Programmeur {
 
 
     /**
-     * @param id the id to set
+     * Définit l'identifiant du programmeur.
+     * @param id Le nouvel identifiant du programmeur
      */
     public void setId(int id) {
       this.id = id;
     }
 
     /**
-     * @return the hobby
+     * Retourne le hobby du programmeur.
+     * @return Le hobby du programmeur
      */
     public String getHobby() {
       return hobby;
     }
 
     /**
-     * @param hobby the hobby to set
+     * Définit le hobby du programmeur.
+     * @param hobby Le nouveau hobby du programmeur
      */
     public void setHobby(String hobby) {
       this.hobby = hobby;
     }
 
     /**
-     * @return the responsable
+     * Retourne le responsable du programmeur.
+     * @return Le responsable du programmeur
      */
     public String getResponsable() {
       return responsable;
     }
 
     /**
-     * @param responsable the responsable to set
+     * Définit le responsable du programmeur.
+     * @param responsable Le nouveau responsable du programmeur
      */
     public void setResponsable(String responsable) {
       this.responsable = responsable;
     }
 
     /**
-     * @return the adresse
+     * Retourne l'adresse du programmeur.
+     * @return L'adresse du programmeur
      */
     public String getAdresse() {
       return adresse;
     }
 
     /**
-     * @param adresse the adresse to set
+     * Définit l'adresse du programmeur.
+     * @param adresse La nouvelle adresse du programmeur
      */
     public void setAdresse(String adresse) {
       this.adresse = adresse;

@@ -15,7 +15,11 @@ import entity.Etat;
 import entity.Programmeur;
 import entity.Projet;
 
-
+/**
+ * Implémentation de l'interface ActionBDD pour les opérations sur la base de données.
+ * Cette classe gère la connexion à la base de données MySQL et fournit les méthodes
+ * CRUD pour les programmeurs et les projets.
+ */
 public class ActionBDDImpl implements ActionBDD {
   private Connection connection;
 
@@ -192,6 +196,10 @@ public class ActionBDDImpl implements ActionBDD {
     }
   }
 
+  /**
+   * Récupère tous les projets de la base de données.
+   * @return La liste de tous les projets avec leurs programmeurs associés
+   */
   public List<Projet> getProjets() {
       try {
           String query = "SELECT id, intitule, dateDebut, dateFin, etat FROM projet";
@@ -217,6 +225,11 @@ public class ActionBDDImpl implements ActionBDD {
       }
   }
 
+  /**
+   * Récupère la liste des programmeurs affectés à un projet spécifique.
+   * @param idProjet L'identifiant du projet
+   * @return La liste des programmeurs du projet
+   */
   public List<Programmeur> getProgrammeursFromProjet(int idProjet) {
     try {
       String query = "SELECT id, nom, prenom, adresse, ANNAISSANCE, hobby, responsable, salaire, prime, pseudo " + 
